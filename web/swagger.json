@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "version": "2017-08-21T14:48:03Z",
+    "version": "2017-08-29T16:04:08Z",
     "title": "PublicApiTest"
   },
   "host": "clb83w9o1g.execute-api.us-east-1.amazonaws.com",
@@ -25,6 +25,107 @@
               "$ref": "#/definitions/Empty"
             }
           }
+        },
+        "x-amazon-apigateway-integration": {
+          "responses": {
+            "default": {
+              "statusCode": "200",
+              "responseTemplates": {
+                "application/json": "##  See http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-mapping-template-reference.html\n##  This template will pass through all parameters including path, querystring, header, stage variables, and context through to the integration endpoint via the body/payload\n#set($allParams = $input.params())\n{\n\"body-json\" : $input.json('$'),\n\"params\" : {\n#foreach($type in $allParams.keySet())\n    #set($params = $allParams.get($type))\n\"$type\" : {\n    #foreach($paramName in $params.keySet())\n    \"$paramName\" : \"$util.escapeJavaScript($params.get($paramName))\"\n        #if($foreach.hasNext),#end\n    #end\n}\n    #if($foreach.hasNext),#end\n#end\n},\n\"stage-variables\" : {\n#foreach($key in $stageVariables.keySet())\n\"$key\" : \"$util.escapeJavaScript($stageVariables.get($key))\"\n    #if($foreach.hasNext),#end\n#end\n},\n\"context\" : {\n    \"account-id\" : \"$context.identity.accountId\",\n    \"api-id\" : \"$context.apiId\",\n    \"api-key\" : \"$context.identity.apiKey\",\n    \"authorizer-principal-id\" : \"$context.authorizer.principalId\",\n    \"caller\" : \"$context.identity.caller\",\n    \"cognito-authentication-provider\" : \"$context.identity.cognitoAuthenticationProvider\",\n    \"cognito-authentication-type\" : \"$context.identity.cognitoAuthenticationType\",\n    \"cognito-identity-id\" : \"$context.identity.cognitoIdentityId\",\n    \"cognito-identity-pool-id\" : \"$context.identity.cognitoIdentityPoolId\",\n    \"http-method\" : \"$context.httpMethod\",\n    \"stage\" : \"$context.stage\",\n    \"source-ip\" : \"$context.identity.sourceIp\",\n    \"user\" : \"$context.identity.user\",\n    \"user-agent\" : \"$context.identity.userAgent\",\n    \"user-arn\" : \"$context.identity.userArn\",\n    \"request-id\" : \"$context.requestId\",\n    \"resource-id\" : \"$context.resourceId\",\n    \"resource-path\" : \"$context.resourcePath\"\n    }\n}\n"
+              }
+            }
+          },
+          "requestTemplates": {
+            "application/json": "{\"statusCode\": 200}"
+          },
+          "passthroughBehavior": "when_no_match",
+          "type": "mock"
+        }
+      }
+    },
+    "/batchstatuses": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            }
+          }
+        },
+        "x-amazon-apigateway-integration": {
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          },
+          "requestParameters": {
+            "integration.request.header.x-api-key": "method.request.header.x-api-key"
+          },
+          "uri": "http://54.91.94.34/batchStatuses",
+          "passthroughBehavior": "when_no_match",
+          "httpMethod": "GET",
+          "type": "http"
+        }
+      }
+    },
+    "/batchstatuses/{batchId}": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "batchId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "x-amazon-apigateway-integration": {
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          },
+          "requestParameters": {
+            "integration.request.path.batchId": "method.request.path.batchId",
+            "integration.request.header.x-api-key": "method.request.header.x-api-key"
+          },
+          "uri": "http://54.91.94.34/batchStatuses/{batchId}",
+          "passthroughBehavior": "when_no_match",
+          "httpMethod": "GET",
+          "type": "http"
         }
       }
     },
@@ -35,9 +136,9 @@
         ],
         "parameters": [
           {
-            "name": "X-Appeagle-Authentication",
+            "name": "x-api-key",
             "in": "header",
-            "required": false,
+            "required": true,
             "type": "string"
           }
         ],
@@ -53,7 +154,21 @@
           {
             "api_key": []
           }
-        ]
+        ],
+        "x-amazon-apigateway-integration": {
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          },
+          "requestParameters": {
+            "integration.request.header.x-api-key": "method.request.header.x-api-key"
+          },
+          "uri": "http://54.91.94.34/prices",
+          "passthroughBehavior": "when_no_match",
+          "httpMethod": "GET",
+          "type": "http"
+        }
       },
       "post": {
         "produces": [
@@ -61,7 +176,7 @@
         ],
         "parameters": [
           {
-            "name": "X-Appeagle-Authentication",
+            "name": "x-api-key",
             "in": "header",
             "required": false,
             "type": "string"
@@ -79,7 +194,21 @@
           {
             "api_key": []
           }
-        ]
+        ],
+        "x-amazon-apigateway-integration": {
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          },
+          "requestParameters": {
+            "integration.request.header.x-api-key": "method.request.header.x-api-key"
+          },
+          "uri": "http://54.91.94.34/prices",
+          "passthroughBehavior": "when_no_match",
+          "httpMethod": "POST",
+          "type": "http"
+        }
       },
       "put": {
         "produces": [
@@ -87,7 +216,7 @@
         ],
         "parameters": [
           {
-            "name": "X-Appeagle-Authentication",
+            "name": "x-api-key",
             "in": "header",
             "required": false,
             "type": "string"
@@ -105,7 +234,116 @@
           {
             "api_key": []
           }
-        ]
+        ],
+        "x-amazon-apigateway-integration": {
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          },
+          "requestParameters": {
+            "integration.request.header.x-api-key": "method.request.header.x-api-key"
+          },
+          "uri": "http://54.91.94.34/prices",
+          "passthroughBehavior": "when_no_match",
+          "httpMethod": "PUT",
+          "type": "http"
+        }
+      }
+    },
+    "/prices/{marketplaceId}": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "marketplaceId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            }
+          }
+        },
+        "x-amazon-apigateway-integration": {
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          },
+          "requestParameters": {
+            "integration.request.path.marketplaceId": "method.request.path.marketplaceId",
+            "integration.request.header.x-api-key": "method.request.header.x-api-key"
+          },
+          "uri": "http://54.91.94.34/prices/{marketplaceId}",
+          "passthroughBehavior": "when_no_match",
+          "httpMethod": "GET",
+          "type": "http"
+        }
+      }
+    },
+    "/prices/{marketplaceId}/{sku}": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "marketplaceId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "sku",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            }
+          }
+        },
+        "x-amazon-apigateway-integration": {
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          },
+          "requestParameters": {
+            "integration.request.path.marketplaceId": "method.request.path.marketplaceId",
+            "integration.request.header.x-api-key": "method.request.header.x-api-key",
+            "integration.request.path.sku": "method.request.path.sku"
+          },
+          "uri": "http://54.91.94.34/prices/{marketplaceId}/{sku}",
+          "passthroughBehavior": "when_no_match",
+          "httpMethod": "GET",
+          "type": "http"
+        }
       }
     },
     "/strategymappings": {
@@ -115,7 +353,7 @@
         ],
         "parameters": [
           {
-            "name": "X-Appeagle-Authentication",
+            "name": "x-api-key",
             "in": "header",
             "required": false,
             "type": "string"
@@ -133,7 +371,21 @@
           {
             "api_key": []
           }
-        ]
+        ],
+        "x-amazon-apigateway-integration": {
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          },
+          "requestParameters": {
+            "integration.request.header.x-api-key": "method.request.header.x-api-key"
+          },
+          "uri": "http://54.91.94.34/strategyMappings",
+          "passthroughBehavior": "when_no_match",
+          "httpMethod": "GET",
+          "type": "http"
+        }
       },
       "post": {
         "produces": [
@@ -141,7 +393,7 @@
         ],
         "parameters": [
           {
-            "name": "X-Appeagle-Authentication",
+            "name": "x-api-key",
             "in": "header",
             "required": false,
             "type": "string"
@@ -159,7 +411,21 @@
           {
             "api_key": []
           }
-        ]
+        ],
+        "x-amazon-apigateway-integration": {
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          },
+          "requestParameters": {
+            "integration.request.header.x-api-key": "method.request.header.x-api-key"
+          },
+          "uri": "http://54.91.94.34/strategyMappings",
+          "passthroughBehavior": "when_no_match",
+          "httpMethod": "POST",
+          "type": "http"
+        }
       },
       "put": {
         "produces": [
@@ -167,7 +433,7 @@
         ],
         "parameters": [
           {
-            "name": "X-Appeagle-Authentication",
+            "name": "x-api-key",
             "in": "header",
             "required": false,
             "type": "string"
@@ -185,7 +451,65 @@
           {
             "api_key": []
           }
-        ]
+        ],
+        "x-amazon-apigateway-integration": {
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          },
+          "requestParameters": {
+            "integration.request.header.x-api-key": "method.request.header.x-api-key"
+          },
+          "uri": "http://54.91.94.34/strategyMappings",
+          "passthroughBehavior": "when_no_match",
+          "httpMethod": "PUT",
+          "type": "http"
+        }
+      }
+    },
+    "/strategymappings/{marketplaceId}": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "marketplaceId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            }
+          }
+        },
+        "x-amazon-apigateway-integration": {
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          },
+          "requestParameters": {
+            "integration.request.path.marketplaceId": "method.request.path.marketplaceId",
+            "integration.request.header.x-api-key": "method.request.header.x-api-key"
+          },
+          "uri": "http://54.91.94.34/strategyMappings/{marketplaceId}",
+          "passthroughBehavior": "when_no_match",
+          "httpMethod": "GET",
+          "type": "http"
+        }
       }
     },
     "/systemmanaged": {
@@ -195,7 +519,7 @@
         ],
         "parameters": [
           {
-            "name": "X-Appeagle-Authentication",
+            "name": "x-api-key",
             "in": "header",
             "required": false,
             "type": "string"
@@ -213,7 +537,21 @@
           {
             "api_key": []
           }
-        ]
+        ],
+        "x-amazon-apigateway-integration": {
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          },
+          "requestParameters": {
+            "integration.request.header.x-api-key": "method.request.header.x-api-key"
+          },
+          "uri": "http://54.91.94.34/systemManaged",
+          "passthroughBehavior": "when_no_match",
+          "httpMethod": "GET",
+          "type": "http"
+        }
       },
       "post": {
         "produces": [
@@ -221,26 +559,7 @@
         ],
         "parameters": [
           {
-            "name": "X-Appeagle-Authentication",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "responses": {},
-        "security": [
-          {
-            "api_key": []
-          }
-        ]
-      },
-      "put": {
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "X-Appeagle-Authentication",
+            "name": "x-api-key",
             "in": "header",
             "required": false,
             "type": "string"
@@ -258,7 +577,61 @@
           {
             "api_key": []
           }
-        ]
+        ],
+        "x-amazon-apigateway-integration": {
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          },
+          "requestParameters": {
+            "integration.request.header.x-api-key": "method.request.header.x-api-key"
+          },
+          "uri": "http://54.91.94.34/systemManaged",
+          "passthroughBehavior": "when_no_match",
+          "httpMethod": "POST",
+          "type": "http"
+        }
+      },
+      "put": {
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "x-amazon-apigateway-integration": {
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          },
+          "requestParameters": {
+            "integration.request.header.x-api-key": "method.request.header.x-api-key"
+          },
+          "uri": "http://54.91.94.34/systemManaged",
+          "passthroughBehavior": "when_no_match",
+          "httpMethod": "PUT",
+          "type": "http"
+        }
       }
     }
   },
@@ -274,5 +647,37 @@
       "type": "object",
       "title": "Empty Schema"
     }
+  },
+  "x-amazon-apigateway-documentation": {
+    "version": "1.1",
+    "createdDate": "2017-08-31T16:06:45Z",
+    "documentationParts": [
+      {
+        "location": {
+          "type": "API"
+        },
+        "properties": {
+          "description": "test of documentation part"
+        }
+      },
+      {
+        "location": {
+          "type": "RESOURCE",
+          "path": "/batchstatuses/{batchId}"
+        },
+        "properties": {
+          "description": "Gets the status of a single batch processing request."
+        }
+      },
+      {
+        "location": {
+          "type": "RESOURCE",
+          "path": "/batchstatuses"
+        },
+        "properties": {
+          "description": "Get the status of existing batch process requests."
+        }
+      }
+    ]
   }
 }
