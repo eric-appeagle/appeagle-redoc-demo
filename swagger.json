@@ -26,27 +26,13 @@
               "$ref": "#/definitions/Empty"
             }
           }
-        },
-        "x-amazon-apigateway-integration": {
-          "responses": {
-            "default": {
-              "statusCode": "200",
-              "responseTemplates": {
-                "application/json": "##  See http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-mapping-template-reference.html\n##  This template will pass through all parameters including path, querystring, header, stage variables, and context through to the integration endpoint via the body/payload\n#set($allParams = $input.params())\n{\n\"body-json\" : $input.json('$'),\n\"params\" : {\n#foreach($type in $allParams.keySet())\n    #set($params = $allParams.get($type))\n\"$type\" : {\n    #foreach($paramName in $params.keySet())\n    \"$paramName\" : \"$util.escapeJavaScript($params.get($paramName))\"\n        #if($foreach.hasNext),#end\n    #end\n}\n    #if($foreach.hasNext),#end\n#end\n},\n\"stage-variables\" : {\n#foreach($key in $stageVariables.keySet())\n\"$key\" : \"$util.escapeJavaScript($stageVariables.get($key))\"\n    #if($foreach.hasNext),#end\n#end\n},\n\"context\" : {\n    \"account-id\" : \"$context.identity.accountId\",\n    \"api-id\" : \"$context.apiId\",\n    \"api-key\" : \"$context.identity.apiKey\",\n    \"authorizer-principal-id\" : \"$context.authorizer.principalId\",\n    \"caller\" : \"$context.identity.caller\",\n    \"cognito-authentication-provider\" : \"$context.identity.cognitoAuthenticationProvider\",\n    \"cognito-authentication-type\" : \"$context.identity.cognitoAuthenticationType\",\n    \"cognito-identity-id\" : \"$context.identity.cognitoIdentityId\",\n    \"cognito-identity-pool-id\" : \"$context.identity.cognitoIdentityPoolId\",\n    \"http-method\" : \"$context.httpMethod\",\n    \"stage\" : \"$context.stage\",\n    \"source-ip\" : \"$context.identity.sourceIp\",\n    \"user\" : \"$context.identity.user\",\n    \"user-agent\" : \"$context.identity.userAgent\",\n    \"user-arn\" : \"$context.identity.userArn\",\n    \"request-id\" : \"$context.requestId\",\n    \"resource-id\" : \"$context.resourceId\",\n    \"resource-path\" : \"$context.resourcePath\"\n    }\n}\n"
-              }
-            }
-          },
-          "requestTemplates": {
-            "application/json": "{\"statusCode\": 200}"
-          },
-          "passthroughBehavior": "when_no_match",
-          "type": "mock"
         }
       }
     },
     "/batchstatuses": {
       "get": {
-        "description": "This is a GET method on batchstatuses",
+        "summary": "Batch Statuses",
+        "description": "THis is a summary for batchstatuses path.",
         "produces": [
           "application/json"
         ],
@@ -60,25 +46,40 @@
         ],
         "responses": {
           "200": {
-            "description": "200 response",
+            "description": "A list was retrieved successfully",
+            "headers": {
+              "Rate-Limit-Limit": {
+                "description": "The number of allowed requests in the current period",
+                "type": "integer"
+              },
+              "Rate-Limit-Remaining": {
+                "description": "The number of remaining requests in the current period",
+                "type": "integer"
+              },
+              "Rate-Limit-Reset": {
+                "description": "The date in format defined by [RFC 822](https://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.3.1)\nwhen the current period will reset\n",
+                "type": "string"
+              },
+              "Pagination-Total": {
+                "description": "Total items count",
+                "type": "integer"
+              },
+              "Pagination-Limit": {
+                "description": "Items per page limit",
+                "type": "integer"
+              },
+              "Pagination-Offset": {
+                "description": "Pagination offset",
+                "type": "integer"
+              }
+            },
             "schema": {
-              "$ref": "#/definitions/Empty"
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ThreeDSecure"
+              }
             }
           }
-        },
-        "x-amazon-apigateway-integration": {
-          "responses": {
-            "default": {
-              "statusCode": "200"
-            }
-          },
-          "requestParameters": {
-            "integration.request.header.x-api-key": "method.request.header.x-api-key"
-          },
-          "uri": "http://54.91.94.34/batchStatuses",
-          "passthroughBehavior": "when_no_match",
-          "httpMethod": "GET",
-          "type": "http"
         }
       }
     },
@@ -112,24 +113,9 @@
         },
         "security": [
           {
-            "api_key": []
+            "api_key": [ ]
           }
-        ],
-        "x-amazon-apigateway-integration": {
-          "responses": {
-            "default": {
-              "statusCode": "200"
-            }
-          },
-          "requestParameters": {
-            "integration.request.path.batchId": "method.request.path.batchId",
-            "integration.request.header.x-api-key": "method.request.header.x-api-key"
-          },
-          "uri": "http://54.91.94.34/batchStatuses/{batchId}",
-          "passthroughBehavior": "when_no_match",
-          "httpMethod": "GET",
-          "type": "http"
-        }
+        ]
       }
     },
     "/prices": {
@@ -156,23 +142,9 @@
         },
         "security": [
           {
-            "api_key": []
+            "api_key": [ ]
           }
-        ],
-        "x-amazon-apigateway-integration": {
-          "responses": {
-            "default": {
-              "statusCode": "200"
-            }
-          },
-          "requestParameters": {
-            "integration.request.header.x-api-key": "method.request.header.x-api-key"
-          },
-          "uri": "http://54.91.94.34/prices",
-          "passthroughBehavior": "when_no_match",
-          "httpMethod": "GET",
-          "type": "http"
-        }
+        ]
       },
       "post": {
         "description": "This is documentation under prices for POST",
@@ -197,23 +169,9 @@
         },
         "security": [
           {
-            "api_key": []
+            "api_key": [ ]
           }
-        ],
-        "x-amazon-apigateway-integration": {
-          "responses": {
-            "default": {
-              "statusCode": "200"
-            }
-          },
-          "requestParameters": {
-            "integration.request.header.x-api-key": "method.request.header.x-api-key"
-          },
-          "uri": "http://54.91.94.34/prices",
-          "passthroughBehavior": "when_no_match",
-          "httpMethod": "POST",
-          "type": "http"
-        }
+        ]
       },
       "put": {
         "description": "This is documentation under prices for PUT",
@@ -238,23 +196,9 @@
         },
         "security": [
           {
-            "api_key": []
+            "api_key": [ ]
           }
-        ],
-        "x-amazon-apigateway-integration": {
-          "responses": {
-            "default": {
-              "statusCode": "200"
-            }
-          },
-          "requestParameters": {
-            "integration.request.header.x-api-key": "method.request.header.x-api-key"
-          },
-          "uri": "http://54.91.94.34/prices",
-          "passthroughBehavior": "when_no_match",
-          "httpMethod": "PUT",
-          "type": "http"
-        }
+        ]
       }
     },
     "/prices/{marketplaceId}": {
@@ -284,21 +228,6 @@
               "$ref": "#/definitions/Empty"
             }
           }
-        },
-        "x-amazon-apigateway-integration": {
-          "responses": {
-            "default": {
-              "statusCode": "200"
-            }
-          },
-          "requestParameters": {
-            "integration.request.path.marketplaceId": "method.request.path.marketplaceId",
-            "integration.request.header.x-api-key": "method.request.header.x-api-key"
-          },
-          "uri": "http://54.91.94.34/prices/{marketplaceId}",
-          "passthroughBehavior": "when_no_match",
-          "httpMethod": "GET",
-          "type": "http"
         }
       }
     },
@@ -335,22 +264,6 @@
               "$ref": "#/definitions/Empty"
             }
           }
-        },
-        "x-amazon-apigateway-integration": {
-          "responses": {
-            "default": {
-              "statusCode": "200"
-            }
-          },
-          "requestParameters": {
-            "integration.request.path.marketplaceId": "method.request.path.marketplaceId",
-            "integration.request.header.x-api-key": "method.request.header.x-api-key",
-            "integration.request.path.sku": "method.request.path.sku"
-          },
-          "uri": "http://54.91.94.34/prices/{marketplaceId}/{sku}",
-          "passthroughBehavior": "when_no_match",
-          "httpMethod": "GET",
-          "type": "http"
         }
       }
     },
@@ -378,23 +291,9 @@
         },
         "security": [
           {
-            "api_key": []
+            "api_key": [ ]
           }
-        ],
-        "x-amazon-apigateway-integration": {
-          "responses": {
-            "default": {
-              "statusCode": "200"
-            }
-          },
-          "requestParameters": {
-            "integration.request.header.x-api-key": "method.request.header.x-api-key"
-          },
-          "uri": "http://54.91.94.34/strategyMappings",
-          "passthroughBehavior": "when_no_match",
-          "httpMethod": "GET",
-          "type": "http"
-        }
+        ]
       },
       "post": {
         "description": "POST method for strategymappings",
@@ -419,23 +318,9 @@
         },
         "security": [
           {
-            "api_key": []
+            "api_key": [ ]
           }
-        ],
-        "x-amazon-apigateway-integration": {
-          "responses": {
-            "default": {
-              "statusCode": "200"
-            }
-          },
-          "requestParameters": {
-            "integration.request.header.x-api-key": "method.request.header.x-api-key"
-          },
-          "uri": "http://54.91.94.34/strategyMappings",
-          "passthroughBehavior": "when_no_match",
-          "httpMethod": "POST",
-          "type": "http"
-        }
+        ]
       },
       "put": {
         "description": "This is a PUT method for the strategymappings path. ",
@@ -460,23 +345,9 @@
         },
         "security": [
           {
-            "api_key": []
+            "api_key": [ ]
           }
-        ],
-        "x-amazon-apigateway-integration": {
-          "responses": {
-            "default": {
-              "statusCode": "200"
-            }
-          },
-          "requestParameters": {
-            "integration.request.header.x-api-key": "method.request.header.x-api-key"
-          },
-          "uri": "http://54.91.94.34/strategyMappings",
-          "passthroughBehavior": "when_no_match",
-          "httpMethod": "PUT",
-          "type": "http"
-        }
+        ]
       }
     },
     "/strategymappings/{marketplaceId}": {
@@ -506,21 +377,6 @@
               "$ref": "#/definitions/Empty"
             }
           }
-        },
-        "x-amazon-apigateway-integration": {
-          "responses": {
-            "default": {
-              "statusCode": "200"
-            }
-          },
-          "requestParameters": {
-            "integration.request.path.marketplaceId": "method.request.path.marketplaceId",
-            "integration.request.header.x-api-key": "method.request.header.x-api-key"
-          },
-          "uri": "http://54.91.94.34/strategyMappings/{marketplaceId}",
-          "passthroughBehavior": "when_no_match",
-          "httpMethod": "GET",
-          "type": "http"
         }
       }
     },
@@ -548,23 +404,9 @@
         },
         "security": [
           {
-            "api_key": []
+            "api_key": [ ]
           }
-        ],
-        "x-amazon-apigateway-integration": {
-          "responses": {
-            "default": {
-              "statusCode": "200"
-            }
-          },
-          "requestParameters": {
-            "integration.request.header.x-api-key": "method.request.header.x-api-key"
-          },
-          "uri": "http://54.91.94.34/systemManaged",
-          "passthroughBehavior": "when_no_match",
-          "httpMethod": "GET",
-          "type": "http"
-        }
+        ]
       },
       "post": {
         "description": "This is the POST method under the systemmanaged",
@@ -589,23 +431,9 @@
         },
         "security": [
           {
-            "api_key": []
+            "api_key": [ ]
           }
-        ],
-        "x-amazon-apigateway-integration": {
-          "responses": {
-            "default": {
-              "statusCode": "200"
-            }
-          },
-          "requestParameters": {
-            "integration.request.header.x-api-key": "method.request.header.x-api-key"
-          },
-          "uri": "http://54.91.94.34/systemManaged",
-          "passthroughBehavior": "when_no_match",
-          "httpMethod": "POST",
-          "type": "http"
-        }
+        ]
       },
       "put": {
         "description": "This is the PUT method under the systemmanaged path",
@@ -630,23 +458,9 @@
         },
         "security": [
           {
-            "api_key": []
+            "api_key": [ ]
           }
-        ],
-        "x-amazon-apigateway-integration": {
-          "responses": {
-            "default": {
-              "statusCode": "200"
-            }
-          },
-          "requestParameters": {
-            "integration.request.header.x-api-key": "method.request.header.x-api-key"
-          },
-          "uri": "http://54.91.94.34/systemManaged",
-          "passthroughBehavior": "when_no_match",
-          "httpMethod": "PUT",
-          "type": "http"
-        }
+        ]
       }
     }
   },
@@ -662,252 +476,5 @@
       "type": "object",
       "title": "Empty Schema"
     }
-  },
-  "x-amazon-apigateway-documentation": {
-    "version": "ReDoc1",
-    "createdDate": "2017-09-05T18:04:19Z",
-    "documentationParts": [
-      {
-        "location": {
-          "type": "API"
-        },
-        "properties": {
-          "description": "Appeagle Sample API"
-        }
-      },
-      {
-        "location": {
-          "type": "METHOD",
-          "method": "GET"
-        },
-        "properties": {
-          "description": "This is the main GET method on the / resource"
-        }
-      },
-      {
-        "location": {
-          "type": "METHOD",
-          "path": "/batchstatuses/{batchId}",
-          "method": "GET"
-        },
-        "properties": {
-          "description": "This is the GET method under batchid"
-        }
-      },
-      {
-        "location": {
-          "type": "METHOD",
-          "path": "/batchstatuses",
-          "method": "GET"
-        },
-        "properties": {
-          "description": "This is a GET method on batchstatuses"
-        }
-      },
-      {
-        "location": {
-          "type": "METHOD",
-          "path": "/prices/{marketplaceId}/{sku}",
-          "method": "GET"
-        },
-        "properties": {
-          "description": "This is the GET method under SKU of Prices"
-        }
-      },
-      {
-        "location": {
-          "type": "METHOD",
-          "path": "/prices/{marketplaceId}",
-          "method": "GET"
-        },
-        "properties": {
-          "description": "GET method under marketplaceId"
-        }
-      },
-      {
-        "location": {
-          "type": "METHOD",
-          "path": "/prices",
-          "method": "GET"
-        },
-        "properties": {
-          "description": "This is documentation under prices for GET"
-        }
-      },
-      {
-        "location": {
-          "type": "METHOD",
-          "path": "/prices",
-          "method": "POST"
-        },
-        "properties": {
-          "description": "This is documentation under prices for POST"
-        }
-      },
-      {
-        "location": {
-          "type": "METHOD",
-          "path": "/prices",
-          "method": "PUT"
-        },
-        "properties": {
-          "description": "This is documentation under prices for PUT"
-        }
-      },
-      {
-        "location": {
-          "type": "METHOD",
-          "path": "/strategymappings/{marketplaceId}",
-          "method": "GET"
-        },
-        "properties": {
-          "description": "This is a GET method under the strategymappings path"
-        }
-      },
-      {
-        "location": {
-          "type": "METHOD",
-          "path": "/strategymappings",
-          "method": "GET"
-        },
-        "properties": {
-          "description": "GET method for strategymappings"
-        }
-      },
-      {
-        "location": {
-          "type": "METHOD",
-          "path": "/strategymappings",
-          "method": "POST"
-        },
-        "properties": {
-          "description": "POST method for strategymappings"
-        }
-      },
-      {
-        "location": {
-          "type": "METHOD",
-          "path": "/strategymappings",
-          "method": "PUT"
-        },
-        "properties": {
-          "description": "This is a PUT method for the strategymappings path. "
-        }
-      },
-      {
-        "location": {
-          "type": "METHOD",
-          "path": "/systemmanaged",
-          "method": "GET"
-        },
-        "properties": {
-          "description": "This is the GET method under systemmanaged path"
-        }
-      },
-      {
-        "location": {
-          "type": "METHOD",
-          "path": "/systemmanaged",
-          "method": "POST"
-        },
-        "properties": {
-          "description": "This is the POST method under the systemmanaged"
-        }
-      },
-      {
-        "location": {
-          "type": "METHOD",
-          "path": "/systemmanaged",
-          "method": "PUT"
-        },
-        "properties": {
-          "description": "This is the PUT method under the systemmanaged path"
-        }
-      },
-      {
-        "location": {
-          "type": "RESOURCE"
-        },
-        "properties": {
-          "description": "This is the main description for the root resource"
-        }
-      },
-      {
-        "location": {
-          "type": "RESOURCE",
-          "path": "/batchstatuses/{batchId}"
-        },
-        "properties": {
-          "description": "Gets the status of a single batch processing request."
-        }
-      },
-      {
-        "location": {
-          "type": "RESOURCE",
-          "path": "/batchstatuses"
-        },
-        "properties": {
-          "description": "Get the status of existing batch process requests.",
-          "summary": "THis is a summary for batchstatuses path."
-        }
-      },
-      {
-        "location": {
-          "type": "RESOURCE",
-          "path": "/prices/{marketplaceId}/{sku}"
-        },
-        "properties": {
-          "description": "This is the SKU path of the PUT method under prices"
-        }
-      },
-      {
-        "location": {
-          "type": "RESOURCE",
-          "path": "/prices/{marketplaceId}"
-        },
-        "properties": {
-          "description": "Description for marketplaceId for PUT method"
-        }
-      },
-      {
-        "location": {
-          "type": "RESOURCE",
-          "path": "/prices"
-        },
-        "properties": {
-          "description": "This is the prices endpoint",
-          "summary": "THis is a summary for prices path."
-        }
-      },
-      {
-        "location": {
-          "type": "RESOURCE",
-          "path": "/strategymappings/{marketplaceId}"
-        },
-        "properties": {
-          "description": "This is the marketplaceId field for strategymappings path"
-        }
-      },
-      {
-        "location": {
-          "type": "RESOURCE",
-          "path": "/strategymappings"
-        },
-        "properties": {
-          "description": "Description for /strategymappings path",
-          "summary": "THis is a summary for strategymappings path."
-        }
-      },
-      {
-        "location": {
-          "type": "RESOURCE",
-          "path": "/systemmanaged"
-        },
-        "properties": {
-          "description": "This  is a systemmanaged path under the main resource",
-          "summary": "THis is a summary for systemmanaged path."
-        }
-      }
-    ]
   }
 }
