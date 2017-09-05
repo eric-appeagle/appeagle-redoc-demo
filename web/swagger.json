@@ -31,8 +31,8 @@
     },
     "/batchstatuses": {
       "get": {
-        "summary": "THis is a summary for batchstatuses path.",
-        "description": "Batch Statuses",
+        "summary": "Batch Statuses",
+        "description": "THis is a summary for batchstatuses path.",
         "produces": [
           "application/json"
         ],
