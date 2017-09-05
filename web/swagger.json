@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "version": "2017-08-21T14:48:03Z",
+    "version": "2017-08-29T16:04:08Z",
     "title": "PublicApiTest"
   },
   "host": "clb83w9o1g.execute-api.us-east-1.amazonaws.com",
@@ -12,8 +12,7 @@
   "paths": {
     "/": {
       "get": {
-        "summary": "Empty API Call Test - Eric Solan",
-        "description": "This is a description of our test API call. Eric Solan.",
+        "description": "This is the main GET method on the / resource",
         "consumes": [
           "application/json"
         ],
@@ -30,16 +29,76 @@
         }
       }
     },
-    "/prices": {
+    "/batchstatuses": {
       "get": {
+        "description": "This is a GET method on batchstatuses",
         "produces": [
           "application/json"
         ],
         "parameters": [
           {
-            "name": "X-Appeagle-Authentication",
+            "name": "x-api-key",
             "in": "header",
             "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            }
+          }
+        }
+      }
+    },
+    "/batchstatuses/{batchId}": {
+      "get": {
+        "description": "This is the GET method under batchid",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "batchId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/prices": {
+      "get": {
+        "description": "This is documentation under prices for GET",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": true,
             "type": "string"
           }
         ],
@@ -58,12 +117,13 @@
         ]
       },
       "post": {
+        "description": "This is documentation under prices for POST",
         "produces": [
           "application/json"
         ],
         "parameters": [
           {
-            "name": "X-Appeagle-Authentication",
+            "name": "x-api-key",
             "in": "header",
             "required": false,
             "type": "string"
@@ -84,12 +144,13 @@
         ]
       },
       "put": {
+        "description": "This is documentation under prices for PUT",
         "produces": [
           "application/json"
         ],
         "parameters": [
           {
-            "name": "X-Appeagle-Authentication",
+            "name": "x-api-key",
             "in": "header",
             "required": false,
             "type": "string"
@@ -108,16 +169,83 @@
             "api_key": []
           }
         ]
+      }
+    },
+    "/prices/{marketplaceId}": {
+      "get": {
+        "description": "GET method under marketplaceId",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "marketplaceId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            }
+          }
+        }
+      }
+    },
+    "/prices/{marketplaceId}/{sku}": {
+      "get": {
+        "description": "This is the GET method under SKU of Prices",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "marketplaceId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "sku",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            }
+          }
+        }
       }
     },
     "/strategymappings": {
       "get": {
+        "description": "GET method for strategymappings",
         "produces": [
           "application/json"
         ],
         "parameters": [
           {
-            "name": "X-Appeagle-Authentication",
+            "name": "x-api-key",
             "in": "header",
             "required": false,
             "type": "string"
@@ -138,12 +266,13 @@
         ]
       },
       "post": {
+        "description": "POST method for strategymappings",
         "produces": [
           "application/json"
         ],
         "parameters": [
           {
-            "name": "X-Appeagle-Authentication",
+            "name": "x-api-key",
             "in": "header",
             "required": false,
             "type": "string"
@@ -164,12 +293,13 @@
         ]
       },
       "put": {
+        "description": "This is a PUT method for the strategymappings path. ",
         "produces": [
           "application/json"
         ],
         "parameters": [
           {
-            "name": "X-Appeagle-Authentication",
+            "name": "x-api-key",
             "in": "header",
             "required": false,
             "type": "string"
@@ -190,14 +320,45 @@
         ]
       }
     },
-    "/systemmanaged": {
+    "/strategymappings/{marketplaceId}": {
       "get": {
+        "description": "This is a GET method under the strategymappings path",
         "produces": [
           "application/json"
         ],
         "parameters": [
           {
-            "name": "X-Appeagle-Authentication",
+            "name": "marketplaceId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            }
+          }
+        }
+      }
+    },
+    "/systemmanaged": {
+      "get": {
+        "description": "This is the GET method under systemmanaged path",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "x-api-key",
             "in": "header",
             "required": false,
             "type": "string"
@@ -218,18 +379,26 @@
         ]
       },
       "post": {
+        "description": "This is the POST method under the systemmanaged",
         "produces": [
           "application/json"
         ],
         "parameters": [
           {
-            "name": "X-Appeagle-Authentication",
+            "name": "x-api-key",
             "in": "header",
             "required": false,
             "type": "string"
           }
         ],
-        "responses": {},
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            }
+          }
+        },
         "security": [
           {
             "api_key": []
@@ -237,12 +406,13 @@
         ]
       },
       "put": {
+        "description": "This is the PUT method under the systemmanaged path",
         "produces": [
           "application/json"
         ],
         "parameters": [
           {
-            "name": "X-Appeagle-Authentication",
+            "name": "x-api-key",
             "in": "header",
             "required": false,
             "type": "string"
