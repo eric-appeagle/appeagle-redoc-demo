@@ -31,7 +31,7 @@
     },
     "/batchstatuses": {
       "get": {
-        "description": "This is a GET method on batchstatuses",
+        "description": "Batch Statuses",
         "produces": [
           "application/json"
         ],
