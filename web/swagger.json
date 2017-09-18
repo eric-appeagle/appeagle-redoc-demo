@@ -67,28 +67,6 @@
         } ]
       }
     },
-    "/user" : {
-      "post" : {
-        "tags" : [ "user" ],
-        "summary" : "Create user",
-        "description" : "This can only be done by the logged in user.",
-        "operationId" : "createUser",
-        "consumes" : [ ],
-        "parameters" : [ {
-          "name" : "body",
-          "in" : "body",
-          "required" : true,
-          "schema" : {
-            "$ref" : "#/definitions/Strategy Mappings"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "Status 200"
-          }
-        }
-      }
-    },
     "/user/createWithArray" : {
       "post" : {
         "tags" : [ "user" ],
@@ -264,6 +242,28 @@
         "type" : "string",
         "description" : "The name that needs to be fetched. Use user1 for testing. "
       } ]
+    },
+    "/strategyMappings" : {
+      "post" : {
+        "tags" : [ "user" ],
+        "summary" : "Create user",
+        "description" : "This can only be done by the logged in user.",
+        "operationId" : "createUser",
+        "consumes" : [ ],
+        "parameters" : [ {
+          "name" : "body",
+          "in" : "body",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Strategy Mappings"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Status 200"
+          }
+        }
+      }
     }
   },
   "securityDefinitions" : {
@@ -324,25 +324,6 @@
           "type" : "string"
         }
       }
-    },
-    "Strategy Mappings" : {
-      "type" : "object",
-      "required" : [ "SKU", "StrategyID" ],
-      "properties" : {
-        "listingType" : {
-          "type" : "string",
-          "description" : "Listing Type",
-          "enum" : [ "Amazon MFN", "Amazon FBA" ]
-        },
-        "SKU" : {
-          "type" : "string",
-          "description" : "Proper SKU for the listing"
-        },
-        "StrategyID" : {
-          "type" : "integer"
-        }
-      },
-      "description" : "Returns which listings are mapped to which strategies"
     },
     "Tag" : {
       "type" : "object",
@@ -421,6 +402,25 @@
           "type" : "string"
         }
       }
+    },
+    "Strategy Mappings" : {
+      "type" : "object",
+      "required" : [ "SKU", "StrategyID" ],
+      "properties" : {
+        "listingType" : {
+          "type" : "string",
+          "description" : "Listing Type",
+          "enum" : [ "Amazon MFN", "Amazon FBA" ]
+        },
+        "SKU" : {
+          "type" : "string",
+          "description" : "Proper SKU for the listing"
+        },
+        "StrategyID" : {
+          "type" : "integer"
+        }
+      },
+      "description" : "Returns which listings are mapped to which strategies"
     }
   }
 }
