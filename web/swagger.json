@@ -17,20 +17,20 @@
   "basePath": "/v2",
   "tags": [
     {
-      "name": "pet",
-      "description": "Everything about your Pets"
+      "name": "price",
+      "description": "Retrieve or change the pricing information of your listings."
     },
     {
-      "name": "store",
-      "description": "Access to Petstore orders"
+      "name": "strategyMappings",
+      "description": "Returns which listings are mapped to which strategy. You can also use it to change a listing’s strategy."
     },
     {
-      "name": "user",
-      "description": "Operations about user",
-      "externalDocs": {
-        "description": "Find out more about our store",
-        "url": "http://swagger.io"
-      }
+      "name": "managedListings",
+      "description": "Returns which of your listings are managed or not."
+    },
+    {
+      "name": "batchStatuses",
+      "description": "Determine the status of a batch processing request."
     }
   ],
   "schemes": [
@@ -40,9 +40,9 @@
     "/price": {
       "post": {
         "tags": [
-          "pet"
+          "price"
         ],
-        "summary": "To retrieve prices for all listings in a marketplace you need the marketplace ID.",
+        "summary": "update prices for listings in a marketplace",
         "description": "",
         "operationId": "addPet",
         "consumes": [
@@ -56,11 +56,23 @@
         "parameters": [
           {
             "in": "body",
-            "name": "body",
-            "description": "Pet object that needs to be added to the store",
+            "name": "marketplaceID",
+            "description": "ID of marketplace you want to change listing prices for",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "sku",
+            "description": "SKU of item you want to change the price of",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "userID",
+            "description": "Your Appeagle user ID",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/Price"
+              "$ref": "#/definitions/price"
             }
           }
         ],
@@ -80,9 +92,9 @@
       },
       "put": {
         "tags": [
-          "pet"
+          "price"
         ],
-        "summary": "Update an existing pet",
+        "summary": "Update a price for a specific listing",
         "description": "",
         "operationId": "updatePet",
         "consumes": [
@@ -100,7 +112,7 @@
             "description": "Pet object that needs to be added to the store",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/Price"
+              "$ref": "#/definitions/price"
             }
           }
         ],
@@ -125,13 +137,13 @@
         ]
       }
     },
-    "/pet/findByStatus": {
+    "/price/marketplaceID/int}/{sku}": {
       "get": {
         "tags": [
-          "pet"
+          "price"
         ],
-        "summary": "Finds Pets by status",
-        "description": "Multiple status values can be provided with comma separated strings",
+        "summary": "Retrieve pricing information for a specific listing",
+        "description": "To get pricing information for a specific listing, you need the marketplaceID and the SKU",
         "operationId": "findPetsByStatus",
         "produces": [
           "application/xml",
@@ -162,7 +174,7 @@
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/Price"
+                "$ref": "#/definitions/price"
               }
             }
           },
@@ -180,258 +192,12 @@
         ]
       }
     },
-    "/pet/findByTags": {
+    "/strategyMappings/{marketplaceID:int}": {
       "get": {
         "tags": [
-          "pet"
+          "strategyMappings"
         ],
-        "summary": "Finds Pets by tags",
-        "description": "Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
-        "operationId": "findPetsByTags",
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "tags",
-            "in": "query",
-            "description": "Tags to filter by",
-            "required": true,
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "collectionFormat": "multi"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/Price"
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid tag value"
-          }
-        },
-        "security": [
-          {
-            "petstore_auth": [
-              "write:pets",
-              "read:pets"
-            ]
-          }
-        ],
-        "deprecated": true
-      }
-    },
-    "/pet/{marketplaceId}": {
-      "get": {
-        "tags": [
-          "pet"
-        ],
-        "summary": "Use this API endpoint to retrieve the pricing information of your listings.",
-        "description": "To retrieve prices for all listings in a marketplace you need the marketplace ID.",
-        "operationId": "getPetById",
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "marketplaceId",
-            "in": "path",
-            "description": "ID of Market place you want listing prices for",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "schema": {
-              "$ref": "#/definitions/Price"
-            }
-          },
-          "400": {
-            "description": "Invalid ID supplied"
-          },
-          "404": {
-            "description": "marketplaceID not found"
-          }
-        },
-        "security": [
-          {
-            "api_key": []
-          }
-        ]
-      },
-      "post": {
-        "tags": [
-          "pet"
-        ],
-        "summary": "Updates a pet in the store with form data",
-        "description": "",
-        "operationId": "updatePetWithForm",
-        "consumes": [
-          "application/x-www-form-urlencoded"
-        ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "marketplaceId",
-            "in": "path",
-            "description": "ID of pet that needs to be updated",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          },
-          {
-            "name": "name",
-            "in": "formData",
-            "description": "Updated name of the pet",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "status",
-            "in": "formData",
-            "description": "Updated status of the pet",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "405": {
-            "description": "Invalid input"
-          }
-        },
-        "security": [
-          {
-            "petstore_auth": [
-              "write:pets",
-              "read:pets"
-            ]
-          }
-        ]
-      },
-      "delete": {
-        "tags": [
-          "pet"
-        ],
-        "summary": "Deletes a pet",
-        "description": "",
-        "operationId": "deletePet",
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "api_key",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "marketplaceId",
-            "in": "path",
-            "description": "Pet id to delete",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          }
-        ],
-        "responses": {
-          "400": {
-            "description": "Invalid ID supplied"
-          },
-          "404": {
-            "description": "Pet not found"
-          }
-        },
-        "security": [
-          {
-            "petstore_auth": [
-              "write:pets",
-              "read:pets"
-            ]
-          }
-        ]
-      }
-    },
-    "/pet/{petId}/uploadImage": {
-      "post": {
-        "tags": [
-          "pet"
-        ],
-        "summary": "uploads an image",
-        "description": "",
-        "operationId": "uploadFile",
-        "consumes": [
-          "multipart/form-data"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "petId",
-            "in": "path",
-            "description": "ID of pet to update",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          },
-          {
-            "name": "additionalMetadata",
-            "in": "formData",
-            "description": "Additional data to pass to server",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "file",
-            "in": "formData",
-            "description": "file to upload",
-            "required": false,
-            "type": "file"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "schema": {
-              "$ref": "#/definitions/ApiResponse"
-            }
-          }
-        },
-        "security": [
-          {
-            "petstore_auth": [
-              "write:pets",
-              "read:pets"
-            ]
-          }
-        ]
-      }
-    },
-    "/store/inventory": {
-      "get": {
-        "tags": [
-          "store"
-        ],
-        "summary": "Returns pet inventories by status",
-        "description": "Returns a map of status codes to quantities",
+        "summary": "Returns which listings are mapped to which strategy.",
         "operationId": "getInventory",
         "produces": [
           "application/json"
@@ -456,12 +222,12 @@
         ]
       }
     },
-    "/store/order": {
+    "/strategyMappings/{marketplaceID:int2}": {
       "post": {
         "tags": [
-          "store"
+          "strategyMappings"
         ],
-        "summary": "Place an order for a pet",
+        "summary": "Update strategies for multiple listings",
         "description": "",
         "operationId": "placeOrder",
         "produces": [
@@ -472,10 +238,10 @@
           {
             "in": "body",
             "name": "body",
-            "description": "order placed for purchasing the pet",
+            "description": null,
             "required": true,
             "schema": {
-              "$ref": "#/definitions/Order"
+              "$ref": "#/definitions/strategyMappings"
             }
           }
         ],
@@ -483,7 +249,7 @@
           "200": {
             "description": "successful operation",
             "schema": {
-              "$ref": "#/definitions/Order"
+              "$ref": "#/definitions/strategyMappings"
             }
           },
           "400": {
@@ -492,84 +258,13 @@
         }
       }
     },
-    "/store/order/{orderId}": {
+    "/user": {
       "get": {
         "tags": [
-          "store"
+          "managedListings"
         ],
-        "summary": "Find purchase order by ID",
-        "description": "For valid response try integer IDs with value >= 1 and <= 10. Other values will generated exceptions",
-        "operationId": "getOrderById",
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "orderId",
-            "in": "path",
-            "description": "ID of pet that needs to be fetched",
-            "required": true,
-            "type": "integer",
-            "maximum": 10,
-            "minimum": 1,
-            "format": "int64"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "schema": {
-              "$ref": "#/definitions/Order"
-            }
-          },
-          "400": {
-            "description": "Invalid ID supplied"
-          },
-          "404": {
-            "description": "Order not found"
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "store"
-        ],
-        "summary": "Delete purchase order by ID",
-        "description": "For valid response try integer IDs with positive integer value. Negative or non-integer values will generate API errors",
-        "operationId": "deleteOrder",
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "orderId",
-            "in": "path",
-            "description": "ID of the order that needs to be deleted",
-            "required": true,
-            "type": "integer",
-            "minimum": 1,
-            "format": "int64"
-          }
-        ],
-        "responses": {
-          "400": {
-            "description": "Invalid ID supplied"
-          },
-          "404": {
-            "description": "Order not found"
-          }
-        }
-      }
-    },
-    "/user": {
-      "post": {
-        "tags": [
-          "user"
-        ],
-        "summary": "Create user",
-        "description": "This can only be done by the logged in user.",
+        "summary": "returns which of your listings are managed or not.",
+        "description": null,
         "operationId": "createUser",
         "produces": [
           "application/xml",
@@ -582,7 +277,7 @@
             "description": "Created user object",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/User"
+              "$ref": "#/definitions/managedListings"
             }
           }
         ],
@@ -593,76 +288,10 @@
         }
       }
     },
-    "/user/createWithArray": {
-      "post": {
-        "tags": [
-          "user"
-        ],
-        "summary": "Creates list of users with given input array",
-        "description": "",
-        "operationId": "createUsersWithArrayInput",
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "description": "List of user object",
-            "required": true,
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/User"
-              }
-            }
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "successful operation"
-          }
-        }
-      }
-    },
-    "/user/createWithList": {
-      "post": {
-        "tags": [
-          "user"
-        ],
-        "summary": "Creates list of users with given input array",
-        "description": "",
-        "operationId": "createUsersWithListInput",
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "description": "List of user object",
-            "required": true,
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/User"
-              }
-            }
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "successful operation"
-          }
-        }
-      }
-    },
-    "/user/login": {
+    "/batchstatus/{batchID:guid}": {
       "get": {
         "tags": [
-          "user"
+          "batchStatuses"
         ],
         "summary": "Logs user into the system",
         "description": "",
@@ -673,18 +302,14 @@
         ],
         "parameters": [
           {
-            "name": "username",
+            "name": "batchID GUID",
             "in": "query",
-            "description": "The user name for login",
+            "description": "ID for the batch you want to check the process of",
             "required": true,
-            "type": "string"
-          },
-          {
-            "name": "password",
-            "in": "query",
-            "description": "The password for login in clear text",
-            "required": true,
-            "type": "string"
+            "type": "string",
+            "schema": {
+              "$ref": "#definitions/batchStatuses"
+            }
           }
         ],
         "responses": {
@@ -694,144 +319,25 @@
               "type": "string"
             },
             "headers": {
-              "X-Rate-Limit": {
-                "type": "integer",
+              "Processing": {
+                "type": "string",
                 "format": "int32",
-                "description": "calls per hour allowed by the user"
+                "description": "the batch request is currently processing"
               },
-              "X-Expires-After": {
+              "Succeeded": {
                 "type": "string",
                 "format": "date-time",
-                "description": "date in UTC when token expires"
+                "description": "the batch request has finished processing"
+              },
+              "Failed": {
+                "type": "string",
+                "format": "date-time",
+                "description": "there was an error processing this batch request"
               }
             }
           },
           "400": {
-            "description": "Invalid username/password supplied"
-          }
-        }
-      }
-    },
-    "/user/logout": {
-      "get": {
-        "tags": [
-          "user"
-        ],
-        "summary": "Logs out current logged in user session",
-        "description": "",
-        "operationId": "logoutUser",
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
-        "parameters": [],
-        "responses": {
-          "default": {
-            "description": "successful operation"
-          }
-        }
-      }
-    },
-    "/user/{username}": {
-      "get": {
-        "tags": [
-          "user"
-        ],
-        "summary": "Get user by user name",
-        "description": "",
-        "operationId": "getUserByName",
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "username",
-            "in": "path",
-            "description": "The name that needs to be fetched. Use user1 for testing. ",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "schema": {
-              "$ref": "#/definitions/User"
-            }
-          },
-          "400": {
-            "description": "Invalid username supplied"
-          },
-          "404": {
-            "description": "User not found"
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "user"
-        ],
-        "summary": "Updated user",
-        "description": "This can only be done by the logged in user.",
-        "operationId": "updateUser",
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "username",
-            "in": "path",
-            "description": "name that need to be updated",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "in": "body",
-            "name": "body",
-            "description": "Updated user object",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/User"
-            }
-          }
-        ],
-        "responses": {
-          "400": {
-            "description": "Invalid user supplied"
-          },
-          "404": {
-            "description": "User not found"
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "user"
-        ],
-        "summary": "Delete user",
-        "description": "This can only be done by the logged in user.",
-        "operationId": "deleteUser",
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "username",
-            "in": "path",
-            "description": "The name that needs to be deleted",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "400": {
-            "description": "Invalid username supplied"
-          },
-          "404": {
-            "description": "User not found"
+            "description": "Invalid batchID GUID"
           }
         }
       }
@@ -854,109 +360,67 @@
     }
   },
   "definitions": {
-    "Order": {
+    "strategyMappings": {
       "type": "object",
       "properties": {
-        "id": {
+        "SKU": {
           "type": "integer",
           "format": "int64"
         },
-        "petId": {
+        "strategyId": {
           "type": "integer",
           "format": "int64"
         },
-        "quantity": {
+        "marketplaceID": {
           "type": "integer",
           "format": "int32"
         },
-        "shipDate": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "status": {
+        "listingType": {
           "type": "string",
           "description": "Order Status",
           "enum": [
-            "placed",
-            "approved",
-            "delivered"
+            "Amazon MFN",
+            "Amazon FBA"
           ]
-        },
-        "complete": {
-          "type": "boolean",
-          "default": false
         }
       },
       "xml": {
-        "name": "Order"
+        "name": "strategy"
       }
     },
-    "Category": {
+    "managedListings": {
       "type": "object",
       "properties": {
-        "id": {
+        "SKU": {
           "type": "integer",
           "format": "int64"
         },
-        "name": {
-          "type": "string"
-        }
-      },
-      "xml": {
-        "name": "Category"
-      }
-    },
-    "User": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "username": {
-          "type": "string"
-        },
-        "firstName": {
-          "type": "string"
-        },
-        "lastName": {
-          "type": "string"
-        },
-        "email": {
-          "type": "string"
-        },
-        "password": {
-          "type": "string"
-        },
-        "phone": {
-          "type": "string"
-        },
-        "userStatus": {
+        "marketplaceID": {
           "type": "integer",
           "format": "int32",
           "description": "User Status"
+        },
+        "systemManaged": {
+          "type": "boolean",
+          "default": false
         }
       },
       "xml": {
         "name": "User"
       }
     },
-    "Tag": {
+    "batchStatuses": {
       "type": "object",
       "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "name": {
+        "status": {
           "type": "string"
         }
       },
       "xml": {
-        "name": "Tag"
+        "name": "batch status"
       }
     },
-    "Price": {
+    "price": {
       "type": "object",
       "required": [
         "marketplaceid",
@@ -972,6 +436,11 @@
           "type": "integer",
           "format": "int64",
           "example": "EU-L9FK-6II9"
+        },
+        "userID": {
+          "type": "integer",
+          "format": "int64",
+          "example": 8208
         },
         "MinPrice": {
           "type": "integer",
