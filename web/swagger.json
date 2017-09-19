@@ -1,8 +1,8 @@
 {
   "swagger": "2.0",
   "info": {
-    "description": "# Hello and welcome to Appeagles API! \n# \n## You can use this API to access all our API endpoints, such as:\n## \n* Price\n* Strategy\n* Managed Listings\n* Batch status\n\n\nThe API is organized around REST. Requests should be made over HTTPS. All request and response bodies, including errors, are formatted in JSON and encoded in UTF-8.\n",
-    "version": "1.0.1",
+    "description": "Hello and welcome to Appeagles API!",
+    "version": "1.0.2",
     "title": "Appeagle API",
     "termsOfService": "http://swagger.io/terms/",
     "contact": {
