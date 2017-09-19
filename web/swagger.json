@@ -6,7 +6,6 @@
     "title" : "Appeagle API",
     "termsOfService" : "http://swagger.io/terms/",
     "contact" : {
-      "name" : "Mark Hanna",
       "email" : "mark@appeagle.com"
     },
     "license" : {
@@ -52,7 +51,7 @@
         "name" : "marketplaceID:int",
         "in" : "path",
         "required" : true,
-        "type" : "integer"
+        "type" : "string"
       } ]
     },
     "/price/{marketplaceID:int}/{sku}" : {
@@ -135,8 +134,7 @@
       },
       "put" : {
         "tags" : [ "price" ],
-        "summary" : "Update pricing for a single listing",
-        "description" : "Update pricing for a single listing",
+        "summary" : "Update an existing pet",
         "consumes" : [ "application/json", "application/xml" ],
         "parameters" : [ {
           "name" : "marketplaceID",
@@ -159,55 +157,6 @@
           "type" : "integer",
           "description" : "Your Appeagle user ID"
         }, {
-          "name" : "MinPrice",
-          "in" : "query",
-          "required" : false,
-          "type" : "integer",
-          "description" : "Minimum price of listing",
-          "x-example" : "2.30"
-        }, {
-          "name" : "MaxPrice",
-          "in" : "query",
-          "required" : false,
-          "type" : "integer",
-          "description" : "Maximum price of listing",
-          "x-example" : "7.21"
-        }, {
-          "name" : "CurrentPrice",
-          "in" : "query",
-          "required" : false,
-          "type" : "integer",
-          "description" : "The listing's current price",
-          "x-example" : "5.15"
-        }, {
-          "name" : "CurrentShipping",
-          "in" : "query",
-          "required" : false,
-          "type" : "integer",
-          "description" : "Current shipping cost",
-          "x-example" : "2.11"
-        }, {
-          "name" : "MapPrice",
-          "in" : "query",
-          "required" : false,
-          "type" : "integer",
-          "description" : "I forget",
-          "x-example" : "1.11"
-        }, {
-          "name" : "Cost",
-          "in" : "query",
-          "required" : false,
-          "type" : "integer",
-          "description" : "Cost of your listing",
-          "x-example" : "3.11"
-        }, {
-          "name" : "CostCurrency",
-          "in" : "query",
-          "required" : false,
-          "type" : "integer",
-          "description" : "The currency you're selling your listing in",
-          "x-example" : 1
-        }, {
           "name" : "body",
           "in" : "body",
           "required" : true,
@@ -217,7 +166,7 @@
         } ],
         "responses" : {
           "200" : {
-            "description" : "Your pricing changes were successful"
+            "description" : "Your pricing change was successful"
           },
           "400" : {
             "description" : "Invalid ID supplied"
@@ -454,27 +403,26 @@
   "definitions" : {
     "Price" : {
       "type" : "object",
-      "required" : [ "SKU", "marketplaceID", "userID" ],
+      "required" : [ "name", "photoUrls" ],
       "properties" : {
-        "marketplaceID" : {
+        "id" : {
           "type" : "integer",
-          "format" : "int64",
-          "description" : "MPID",
-          "example" : 10020
+          "format" : "int64"
         },
-        "SKU" : {
-          "type" : "integer",
-          "description" : "SKU of the listing",
-          "example" : "EU-L9FK-6II9"
+        "name" : {
+          "type" : "string",
+          "example" : "doggie"
         },
-        "userID" : {
-          "type" : "integer",
-          "description" : "Your Appeagle user ID"
+        "photoUrls" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
         },
-        "MinPrice" : {
-          "type" : "integer",
-          "description" : "Minimum price of your listing",
-          "example" : "2.33"
+        "status" : {
+          "type" : "string",
+          "description" : "pet status in the store",
+          "enum" : [ "available", "pending", "sold" ]
         }
       }
     },
@@ -515,8 +463,8 @@
         },
         "systemManaged" : {
           "type" : "boolean",
-          "example" : false,
-          "description" : "Status of your listing"
+          "description" : "Status of your listing",
+          "example" : false
         }
       }
     },
@@ -526,14 +474,12 @@
       "properties" : {
         "batchID" : {
           "type" : "integer",
-          "format" : "int64",
-          "description" : "The ID of the batch",
-          "example" : "a1e7fd1a-3038-4238-adc6-16d9efdb198b"
+          "description" : "fadsjf;lasdj"
         },
         "OperationType" : {
           "type" : "string",
-          "example" : "UpdateSystemManaged",
-          "description" : "Beats the hell out of me"
+          "description" : "Beats the hell out of me",
+          "example" : "UpdateSystemManaged"
         },
         "RequestedDate" : {
           "type" : "string",
