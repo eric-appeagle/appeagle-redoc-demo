@@ -2,7 +2,7 @@
   "swagger" : "2.0",
   "info" : {
     "description" : "",
-    "version" : "1.0.0",
+    "version" : "1.0.1",
     "title" : "Appeagle API",
     "termsOfService" : "http://swagger.io/terms/",
     "contact" : {
@@ -25,22 +25,12 @@
         "tags" : [ "price" ],
         "summary" : "Retrieve pricing information",
         "description" : "Retrieve pricing information for listings in a marketplace",
-        "parameters" : [ {
-          "name" : "marketplaceID",
-          "in" : "query",
-          "required" : true,
-          "type" : "integer",
-          "description" : "The marketplace ID",
-          "x-example" : 10020
-        } ],
+        "parameters" : [ ],
         "responses" : {
           "200" : {
             "description" : "Successful operation",
             "schema" : {
-              "type" : "array",
-              "items" : {
-                "$ref" : "#/definitions/Price"
-              }
+              "$ref" : "#/definitions/Price"
             },
             "examples" : {
               "application/json" : "[\n    {\n        \"Sku\": \"EU-L9FK-6II9\",\n        \"UserID\": 8208,\n        \"MarketplaceID\": 10020,\n        \"MinPrice\": 2.46,\n        \"MaxPrice\": 4.32,\n        \"CurrentPrice\": 30,\n        \"CurrentShipping\": 5.02,\n        \"MapPrice\": 0.02,\n        \"Cost\": 7.01,\n        \"CostCurrency\": 1\n    },\n    {\n        \"Sku\": \"FISDIGCAM\",\n        \"UserID\": 8208,\n        \"MarketplaceID\": 10020,\n        \"MinPrice\": 2.46,\n        \"MaxPrice\": 4.32,\n        \"CurrentPrice\": 30,\n        \"CurrentShipping\": null,\n        \"MapPrice\": null,\n        \"Cost\": 7.01,\n        \"CostCurrency\": 1\n    }\n]\n"
@@ -63,33 +53,16 @@
         "tags" : [ "price" ],
         "summary" : "Retrieve listing pricing info",
         "description" : "Retrieve pricing information for a specific listing",
-        "produces" : [ "application/xml", "application/json" ],
-        "parameters" : [ {
-          "name" : "marketplaceID",
-          "in" : "query",
-          "required" : true,
-          "type" : "integer",
-          "description" : "The ID of your marketplace",
-          "x-example" : 100200
-        }, {
-          "name" : "SKU",
-          "in" : "query",
-          "required" : true,
-          "type" : "integer",
-          "description" : "SKU of the listing you want pricing information for",
-          "x-example" : "EU-L9FK-6II9"
-        } ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ ],
         "responses" : {
           "200" : {
             "description" : "Successful operation",
             "schema" : {
-              "type" : "array",
-              "items" : {
-                "$ref" : "#/definitions/Price"
-              }
+              "$ref" : "#/definitions/Price"
             },
             "examples" : {
-              "application/xml" : "    {\n        \"Sku\": \"FISDIGCAM\",\n        \"UserID\": 8208,\n        \"MarketplaceID\": 10020,\n        \"MinPrice\": 2.46,\n        \"MaxPrice\": 4.32,\n        \"CurrentPrice\": 30,\n        \"CurrentShipping\": null,\n        \"MapPrice\": null,\n        \"Cost\": 7.01,\n        \"CostCurrency\": 1\n    }\n"
+              "application/json" : "    {\n        \"Sku\": \"FISDIGCAM\",\n        \"UserID\": 8208,\n        \"MarketplaceID\": 10020,\n        \"MinPrice\": 2.46,\n        \"MaxPrice\": 6.99,\n        \"CurrentPrice\": 5.15,\n        \"CurrentShipping\": 1.50,\n        \"MapPrice\": 2.25,\n        \"Cost\": 2.01,\n        \"CostCurrency\": 1\n    }\n"
             }
           },
           "400" : {
@@ -97,87 +70,37 @@
           }
         }
       },
+      "parameters" : [ {
+        "name" : "marketplaceID:int",
+        "in" : "path",
+        "required" : true,
+        "type" : "integer",
+        "description" : "ID of the marketplace you want to get pricing information for",
+        "x-example" : 10200
+      }, {
+        "name" : "sku",
+        "in" : "path",
+        "required" : true,
+        "type" : "string",
+        "description" : "The SKU of the item you want to get pricing information for",
+        "x-example" : "EU-L9FK-6II9"
+      } ]
+    },
+    "/price" : {
       "post" : {
         "tags" : [ "price" ],
         "summary" : "Update multiple listing prices",
         "description" : "Batch update listing pricing information",
-        "consumes" : [ "application/json", "application/xml" ],
+        "consumes" : [ "application/json" ],
         "parameters" : [ {
-          "name" : "SKU",
-          "in" : "query",
-          "required" : true,
-          "type" : "integer",
-          "description" : "SKU for listing",
-          "x-example" : "EU-L9FK-6II9"
-        }, {
-          "name" : "userID",
-          "in" : "query",
-          "required" : true,
-          "type" : "integer",
-          "description" : "Your Appeagle user ID",
-          "x-example" : 8208
-        }, {
-          "name" : "marketplaceID",
-          "in" : "query",
-          "required" : true,
-          "type" : "integer",
-          "description" : "The ID of your marketplace",
-          "x-example" : 10020
-        }, {
-          "name" : "MinPrice",
-          "in" : "query",
-          "required" : false,
-          "type" : "integer",
-          "description" : "Minimum price of your listing",
-          "x-example" : "2.33"
-        }, {
-          "name" : "MaxPrice",
-          "in" : "query",
-          "required" : false,
-          "type" : "integer",
-          "description" : "Maximum price of your listing",
-          "x-example" : "5.16"
-        }, {
-          "name" : "CurrentPrice",
-          "in" : "query",
-          "required" : false,
-          "type" : "integer",
-          "description" : "Current price your listing is selling for",
-          "x-example" : "3.55"
-        }, {
-          "name" : "CurrentShipping",
-          "in" : "query",
-          "required" : false,
-          "type" : "integer",
-          "description" : "Current cost of shipping",
-          "x-example" : ".19"
-        }, {
-          "name" : "MapPrice",
-          "in" : "query",
-          "required" : false,
-          "type" : "integer",
-          "description" : "The minimum advertised price of your listing",
-          "x-example" : "4.00"
-        }, {
-          "name" : "Cost",
-          "in" : "query",
-          "required" : false,
-          "type" : "integer",
-          "description" : "The cost of your item. How much you paid for it.",
-          "x-example" : "1.16"
-        }, {
-          "name" : "CostCurrency",
-          "in" : "query",
-          "required" : false,
-          "type" : "integer",
-          "description" : "The numerical value indicating what currency your listing is being sold in",
-          "x-example" : 1
-        }, {
           "name" : "body",
           "in" : "body",
           "required" : true,
           "schema" : {
             "$ref" : "#/definitions/Price"
+          },
+          "x-examples" : {
+            "application/json" : "[    \n       {\n        \"marketplaceID\": 10200,\n        \"SKU\": EU-L9FK-6II9,\n        \"MinPrice\": 2.46,\n        \"MaxPrice\": 6.99,\n        \"CurrentPrice\": 5.15,\n        \"CurrentShipping\": 1.50,\n        \"MapPrice\": 2.25,\n        \"Cost\": 2.01,\n        \"CostCurrency\": 1\n       }\n       {\n        \"marketplaceID\": 10200,\n        \"SKU\": EU-L9FK-7789,\n        \"MinPrice\": 2.55,\n        \"MaxPrice\": 8.99,\n        \"CurrentPrice\": 4.19,\n        \"CurrentShipping\": 1.50,\n        \"MapPrice\": 2.99,\n        \"Cost\": 3.21,\n        \"CostCurrency\": 1\n        }\n  ]"
           }
         } ],
         "responses" : {
@@ -193,82 +116,16 @@
         "tags" : [ "price" ],
         "summary" : "Update a listing's price info",
         "description" : "Update pricing for a single listing",
-        "consumes" : [ "application/json", "application/xml" ],
+        "consumes" : [ "application/json" ],
         "parameters" : [ {
-          "name" : "marketplaceID",
-          "in" : "query",
-          "required" : true,
-          "type" : "integer",
-          "description" : "The ID of your marketplace",
-          "x-example" : 10020
-        }, {
-          "name" : "SKU",
-          "in" : "query",
-          "required" : true,
-          "type" : "integer",
-          "description" : "SKU for listing",
-          "x-example" : "EU-L9FK-6II9"
-        }, {
-          "name" : "userID",
-          "in" : "query",
-          "required" : true,
-          "type" : "integer",
-          "description" : "Your Appeagle user ID"
-        }, {
-          "name" : "MinPrice",
-          "in" : "query",
-          "required" : false,
-          "type" : "integer",
-          "description" : "Minimum price of listing",
-          "x-example" : "2.30"
-        }, {
-          "name" : "MaxPrice",
-          "in" : "query",
-          "required" : false,
-          "type" : "integer",
-          "description" : "Maximum price of listing",
-          "x-example" : "7.21"
-        }, {
-          "name" : "CurrentPrice",
-          "in" : "query",
-          "required" : false,
-          "type" : "integer",
-          "description" : "The listing's current price",
-          "x-example" : "5.15"
-        }, {
-          "name" : "CurrentShipping",
-          "in" : "query",
-          "required" : false,
-          "type" : "integer",
-          "description" : "Current shipping cost",
-          "x-example" : "2.11"
-        }, {
-          "name" : "MapPrice",
-          "in" : "query",
-          "required" : false,
-          "type" : "integer",
-          "description" : "The minimum advertised price of your listing",
-          "x-example" : "4.00"
-        }, {
-          "name" : "Cost",
-          "in" : "query",
-          "required" : false,
-          "type" : "integer",
-          "description" : "Cost of your listing",
-          "x-example" : "3.11"
-        }, {
-          "name" : "CostCurrency",
-          "in" : "query",
-          "required" : false,
-          "type" : "integer",
-          "description" : "The currency you're selling your listing in",
-          "x-example" : 1
-        }, {
           "name" : "body",
           "in" : "body",
           "required" : true,
           "schema" : {
             "$ref" : "#/definitions/Price"
+          },
+          "x-examples" : {
+            "application/json" : "    {\n        \"marketplaceID\": 10200,\n        \"SKU\": EU-L9FK-6II9,\n        \"MinPrice\": 2.46,\n        \"MaxPrice\": 6.99,\n        \"CurrentPrice\": 5.15,\n        \"CurrentShipping\": 1.50,\n        \"MapPrice\": 2.25,\n        \"Cost\": 2.01,\n        \"CostCurrency\": 1\n    }"
           }
         } ],
         "responses" : {
@@ -279,18 +136,7 @@
             "description" : "Invalid ID or SKU"
           }
         }
-      },
-      "parameters" : [ {
-        "name" : "marketplaceID:int",
-        "in" : "path",
-        "required" : true,
-        "type" : "integer"
-      }, {
-        "name" : "sku",
-        "in" : "path",
-        "required" : true,
-        "type" : "integer"
-      } ]
+      }
     },
     "/strategyMappings/{marketplaceID:int}" : {
       "get" : {
@@ -298,22 +144,12 @@
         "summary" : "Returns strategies",
         "description" : "Returns which listings are mapped to which strategy by marketplace.",
         "produces" : [ "application/xml", "application/json" ],
-        "parameters" : [ {
-          "name" : "marketplaceID",
-          "in" : "query",
-          "required" : true,
-          "type" : "integer",
-          "description" : "The ID of the marketplace you want to see the strategy of",
-          "x-example" : 10020
-        } ],
+        "parameters" : [ ],
         "responses" : {
           "200" : {
             "description" : "Successful operation",
             "schema" : {
-              "type" : "array",
-              "items" : {
-                "$ref" : "#/definitions/Strategy"
-              }
+              "$ref" : "#/definitions/Strategy"
             },
             "examples" : {
               "application/xml" : "{\n        \"Sku\": \"EU-L9FK-6II9\",\n        \"StrategyID\": 25109,\n        \"MarketplaceID\": 10020,\n        \"ListingType\": \"Amazon MFN\"\n    }\n"
@@ -333,38 +169,21 @@
         "x-example" : "10020"
       } ]
     },
-    "/strategyMappings/{marketplaceID:int}/{sku]" : {
+    "/strategyMappings/{marketplaceID:int}/{sku}" : {
       "get" : {
         "tags" : [ "strategy" ],
         "summary" : "Returns specific listing's strategy",
         "description" : "Retrieve a specific listing's strategy",
         "produces" : [ "application/xml", "application/json" ],
-        "parameters" : [ {
-          "name" : "marketplaceID",
-          "in" : "query",
-          "required" : true,
-          "type" : "integer",
-          "description" : "MPID",
-          "x-example" : 10020
-        }, {
-          "name" : "SKU",
-          "in" : "query",
-          "required" : true,
-          "type" : "integer",
-          "description" : "SKU of the listing",
-          "x-example" : "EU-L9FK-6II9"
-        } ],
+        "parameters" : [ ],
         "responses" : {
           "200" : {
             "description" : "Successful operation",
             "schema" : {
-              "type" : "array",
-              "items" : {
-                "$ref" : "#/definitions/Strategy"
-              }
+              "$ref" : "#/definitions/Strategy"
             },
             "examples" : {
-              "application/xml" : "{\n        \"Sku\": \"EU-L9FK-6II9\",\n        \"StrategyID\": 25109,\n        \"MarketplaceID\": 10020,\n        \"ListingType\": \"Amazon MFN\"\n    }\n"
+              "application/xml" : "{\n        \"SKU\": \"EU-L9FK-6II9\",\n        \"StrategyID\": 25109,\n        \"MarketplaceID\": 10020,\n        \"ListingType\": \"Amazon MFN\"\n    }\n"
             }
           },
           "400" : {
@@ -372,31 +191,38 @@
           }
         }
       },
+      "parameters" : [ {
+        "name" : "marketplaceID:int",
+        "in" : "path",
+        "required" : true,
+        "type" : "integer",
+        "format" : "int64",
+        "x-example" : 10200
+      }, {
+        "name" : "sku",
+        "in" : "path",
+        "required" : true,
+        "type" : "string",
+        "description" : "The SKU of your listing",
+        "x-example" : "EU-L9FK-6II9"
+      } ]
+    },
+    "/strategyMappings" : {
       "post" : {
         "tags" : [ "strategy" ],
         "summary" : "Update multiple strategies",
         "description" : "Batch update the strategy of multiple listings.",
+        "consumes" : [ ],
         "parameters" : [ {
-          "name" : "marketplaceID",
-          "in" : "query",
+          "name" : "body",
+          "in" : "body",
           "required" : true,
-          "type" : "integer",
-          "description" : "MPID",
-          "x-example" : 10020
-        }, {
-          "name" : "SKU",
-          "in" : "query",
-          "required" : false,
-          "type" : "integer",
-          "description" : "SKU of the listing",
-          "x-example" : "EU-L9FK-6II9"
-        }, {
-          "name" : "StrategyID",
-          "in" : "query",
-          "required" : true,
-          "type" : "integer",
-          "description" : "The ID of the strategy you want to update your listing with",
-          "x-example" : 25109
+          "schema" : {
+            "$ref" : "#/definitions/Strategy"
+          },
+          "x-examples" : {
+            "application/json" : "[ \n  {\n        \"SKU\": \"EU-L9FK-6II9\",\n        \"StrategyID\": 25109,\n        \"MarketplaceID\": 10020,\n        \"ListingType\": \"Amazon MFN\"\n    },\n{\n        \"SKU\": \"EU-L9FK-6688\",\n        \"StrategyID\": 35550,\n        \"MarketplaceID\": 10020,\n        \"ListingType\": \"Amazon FBA\"\n    }\n]    "
+          }
         } ],
         "responses" : {
           "200" : {
@@ -411,27 +237,17 @@
         "tags" : [ "strategy" ],
         "summary" : "Update single strategy",
         "description" : "Update strategy of a single listing",
+        "consumes" : [ ],
         "parameters" : [ {
-          "name" : "marketplaceID",
-          "in" : "query",
+          "name" : "body",
+          "in" : "body",
           "required" : true,
-          "type" : "integer",
-          "description" : "MPID",
-          "x-example" : 10020
-        }, {
-          "name" : "SKU",
-          "in" : "query",
-          "required" : true,
-          "type" : "integer",
-          "description" : "SKU of the listing",
-          "x-example" : "EU-L9FK-6II9"
-        }, {
-          "name" : "StrategyID",
-          "in" : "query",
-          "required" : true,
-          "type" : "integer",
-          "description" : "The ID of the Strategy you want to update your listing with",
-          "x-example" : 25109
+          "schema" : {
+            "$ref" : "#/definitions/Strategy"
+          },
+          "x-examples" : {
+            "application/json" : "{\n        \"SKU\": \"EU-L9FK-6II9\",\n        \"StrategyID\": 25109,\n        \"MarketplaceID\": 10020,\n        \"ListingType\": \"Amazon MFN\"\n    }"
+          }
         } ],
         "responses" : {
           "200" : {
@@ -441,16 +257,7 @@
             "description" : "Invalid ID"
           }
         }
-      },
-      "parameters" : [ {
-        "name" : "marketplaceID:int",
-        "in" : "path",
-        "required" : true,
-        "type" : "integer",
-        "format" : "int64",
-        "minimum" : 1,
-        "maximum" : 10
-      } ]
+      }
     },
     "/systemManaged" : {
       "get" : {
@@ -463,10 +270,7 @@
           "200" : {
             "description" : "Successful operation",
             "schema" : {
-              "type" : "array",
-              "items" : {
-                "$ref" : "#/definitions/Managed Listings"
-              }
+              "$ref" : "#/definitions/Managed Listings"
             },
             "examples" : {
               "application/xml" : "{\n        \"Sku\": \"Sandisk3\",\n        \"MarketplaceID\": 10020,\n        \"SystemManaged\": false\n    }"
@@ -496,10 +300,7 @@
           "200" : {
             "description" : "Successful operation",
             "schema" : {
-              "type" : "array",
-              "items" : {
-                "$ref" : "#/definitions/Batch Status"
-              }
+              "$ref" : "#/definitions/Batch Status"
             },
             "examples" : {
               "application/json" : "{\n        \"BatchID\": \"a1e7fd1a-3038-4238-adc6-16d9efdb198b\",\n        \"OperationType\": \"UpdateSystemManaged\",\n        \"RequestedDate\": \"2017-08-15T13:50:15.123\",\n        \"Status\": \"Succeeded\",\n        \"ProcessedDate\": null,\n}"
@@ -524,18 +325,17 @@
   "definitions" : {
     "Price" : {
       "type" : "object",
-      "required" : [ "SKU", "marketplaceID", "userID" ],
+      "required" : [ "SKU", "marketplaceID" ],
       "properties" : {
         "marketplaceID" : {
           "type" : "integer",
-          "format" : "int64",
           "description" : "The ID of your marketplace",
           "example" : 10020
         },
         "SKU" : {
-          "type" : "integer",
-          "description" : "SKU of the listing",
-          "example" : "EU-L9FK-6II9"
+          "type" : "string",
+          "example" : "EU-L9FK-6II9",
+          "description" : "SKU of the listing"
         },
         "userID" : {
           "type" : "integer",
@@ -577,7 +377,8 @@
           "description" : "Numerical value representing the type of currency your item is sold in",
           "example" : 1
         }
-      }
+      },
+      "example" : "  {\n        \"Sku\": \"FISDIGCAM\",\n        \"UserID\": 8208,\n        \"MarketplaceID\": 10020,\n        \"MinPrice\": 2.46,\n        \"MaxPrice\": 4.32,\n        \"CurrentPrice\": 30,\n        \"CurrentShipping\": null,\n        \"MapPrice\": null,\n        \"Cost\": 7.01,\n        \"CostCurrency\": 1\n    }"
     },
     "Strategy" : {
       "type" : "object",
