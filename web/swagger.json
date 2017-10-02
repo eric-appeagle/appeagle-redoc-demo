@@ -2,7 +2,7 @@
   "swagger" : "2.0",
   "info" : {
     "description" : "",
-    "version" : "1.0.1",
+    "version" : "1.0.3",
     "title" : "Appeagle API",
     "termsOfService" : "http://swagger.io/terms/",
     "contact" : {
@@ -14,45 +14,16 @@
       "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
     }
   },
-  "host" : "appeagle.swagger.io",
-  "basePath" : "/v2",
+  "host" : "api.informed.co",
   "schemes" : [ "http" ],
   "consumes" : [ "application/json" ],
   "produces" : [ "application/json" ],
   "paths" : {
-    "/prices/{marketplaceID:int}" : {
+    "/price/{marketplaceID:int}" : {
       "get" : {
         "tags" : [ "price" ],
-        "summary" : "Retrieve pricing information",
-        "description" : "Retrieve pricing information for listings in a marketplace",
-        "parameters" : [ ],
-        "responses" : {
-          "200" : {
-            "description" : "Successful operation",
-            "schema" : {
-              "$ref" : "#/definitions/Price"
-            },
-            "examples" : {
-              "application/json" : "[\n    {\n        \"Sku\": \"EU-L9FK-6II9\",\n        \"UserID\": 8208,\n        \"MarketplaceID\": 10020,\n        \"MinPrice\": 2.46,\n        \"MaxPrice\": 4.32,\n        \"CurrentPrice\": 30,\n        \"CurrentShipping\": 5.02,\n        \"MapPrice\": 0.02,\n        \"Cost\": 7.01,\n        \"CostCurrency\": 1\n    },\n    {\n        \"Sku\": \"FISDIGCAM\",\n        \"UserID\": 8208,\n        \"MarketplaceID\": 10020,\n        \"MinPrice\": 2.46,\n        \"MaxPrice\": 4.32,\n        \"CurrentPrice\": 30,\n        \"CurrentShipping\": null,\n        \"MapPrice\": null,\n        \"Cost\": 7.01,\n        \"CostCurrency\": 1\n    }\n]\n"
-            }
-          },
-          "400" : {
-            "description" : "Invalid ID"
-          }
-        }
-      },
-      "parameters" : [ {
-        "name" : "marketplaceID:int",
-        "in" : "path",
-        "required" : true,
-        "type" : "integer"
-      } ]
-    },
-    "/price/{marketplaceID:int}/{sku}" : {
-      "get" : {
-        "tags" : [ "price" ],
-        "summary" : "Retrieve listing pricing info",
-        "description" : "Retrieve pricing information for a specific listing",
+        "summary" : "Returns listing pricing",
+        "description" : "Returns pricing information for a specific listing",
         "produces" : [ "application/json" ],
         "parameters" : [ ],
         "responses" : {
@@ -77,13 +48,6 @@
         "type" : "integer",
         "description" : "ID of the marketplace you want to get pricing information for",
         "x-example" : 10200
-      }, {
-        "name" : "sku",
-        "in" : "path",
-        "required" : true,
-        "type" : "string",
-        "description" : "The SKU of the item you want to get pricing information for",
-        "x-example" : "EU-L9FK-6II9"
       } ]
     },
     "/price" : {
@@ -114,7 +78,7 @@
       },
       "put" : {
         "tags" : [ "price" ],
-        "summary" : "Update a listing's price info",
+        "summary" : "Update a listing's price data",
         "description" : "Update pricing for a single listing",
         "consumes" : [ "application/json" ],
         "parameters" : [ {
@@ -137,6 +101,43 @@
           }
         }
       }
+    },
+    "/prices/{marketplaceID:int}/{SKU}" : {
+      "get" : {
+        "tags" : [ "price" ],
+        "summary" : "Returns pricing info",
+        "description" : "Returns pricing information for listings in a marketplace",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/Price"
+            },
+            "examples" : {
+              "application/json" : "[\n    {\n        \"Sku\": \"EU-L9FK-6II9\",\n        \"UserID\": 8208,\n        \"MarketplaceID\": 10020,\n        \"MinPrice\": 2.46,\n        \"MaxPrice\": 4.32,\n        \"CurrentPrice\": 30,\n        \"CurrentShipping\": 5.02,\n        \"MapPrice\": 0.02,\n        \"Cost\": 7.01,\n        \"CostCurrency\": 1\n    },\n    {\n        \"Sku\": \"FISDIGCAM\",\n        \"UserID\": 8208,\n        \"MarketplaceID\": 10020,\n        \"MinPrice\": 2.46,\n        \"MaxPrice\": 4.32,\n        \"CurrentPrice\": 30,\n        \"CurrentShipping\": null,\n        \"MapPrice\": null,\n        \"Cost\": 7.01,\n        \"CostCurrency\": 1\n    }\n]\n"
+            }
+          },
+          "400" : {
+            "description" : "Invalid ID"
+          }
+        }
+      },
+      "parameters" : [ {
+        "name" : "marketplaceID:int",
+        "in" : "path",
+        "required" : true,
+        "type" : "string",
+        "description" : "The ID of the marketplace",
+        "x-example" : "10200"
+      }, {
+        "name" : "SKU",
+        "in" : "path",
+        "required" : true,
+        "type" : "string",
+        "description" : "The SKU of your listing",
+        "x-example" : "EU-L9FK-6II9"
+      } ]
     },
     "/strategyMappings/{marketplaceID:int}" : {
       "get" : {
@@ -169,7 +170,7 @@
         "x-example" : "10020"
       } ]
     },
-    "/strategyMappings/{marketplaceID:int}/{sku}" : {
+    "/strategyMappings/{marketplaceID:int}/{SKU}" : {
       "get" : {
         "tags" : [ "strategy" ],
         "summary" : "Returns specific listing's strategy",
@@ -199,7 +200,7 @@
         "format" : "int64",
         "x-example" : 10200
       }, {
-        "name" : "sku",
+        "name" : "SKU",
         "in" : "path",
         "required" : true,
         "type" : "string",
@@ -221,7 +222,7 @@
             "$ref" : "#/definitions/Strategy"
           },
           "x-examples" : {
-            "application/json" : "[ \n  {\n        \"SKU\": \"EU-L9FK-6II9\",\n        \"StrategyID\": 25109,\n        \"MarketplaceID\": 10020,\n        \"ListingType\": \"Amazon MFN\"\n    },\n{\n        \"SKU\": \"EU-L9FK-6688\",\n        \"StrategyID\": 35550,\n        \"MarketplaceID\": 10020,\n        \"ListingType\": \"Amazon FBA\"\n    }\n]    "
+            "application/json" : "[ \n  {\n        \"SKU\": \"EU-L9FK-6II9\",\n        \"StrategyID\": 25109,\n        \"MarketplaceID\": 10020,\n    },\n{\n        \"SKU\": \"EU-L9FK-6688\",\n        \"StrategyID\": 35550,\n        \"MarketplaceID\": 10020,\n    }\n]    "
           }
         } ],
         "responses" : {
@@ -236,7 +237,7 @@
       "put" : {
         "tags" : [ "strategy" ],
         "summary" : "Update single strategy",
-        "description" : "Update strategy of a single listing",
+        "description" : "Update the strategy of a single listing.",
         "consumes" : [ ],
         "parameters" : [ {
           "name" : "body",
@@ -246,7 +247,7 @@
             "$ref" : "#/definitions/Strategy"
           },
           "x-examples" : {
-            "application/json" : "{\n        \"SKU\": \"EU-L9FK-6II9\",\n        \"StrategyID\": 25109,\n        \"MarketplaceID\": 10020,\n        \"ListingType\": \"Amazon MFN\"\n    }"
+            "application/json" : "{\n        \"SKU\": \"EU-L9FK-6II9\",\n        \"StrategyID\": 25109,\n        \"MarketplaceID\": 10020,\n    }"
           }
         } ],
         "responses" : {
@@ -259,40 +260,12 @@
         }
       }
     },
-    "/systemManaged" : {
-      "get" : {
-        "tags" : [ "managedListing" ],
-        "summary" : "Returns managed status",
-        "description" : "Returns which of your listings are managed or not",
-        "produces" : [ "application/xml", "application/json" ],
-        "parameters" : [ ],
-        "responses" : {
-          "200" : {
-            "description" : "Successful operation",
-            "schema" : {
-              "$ref" : "#/definitions/Managed Listings"
-            },
-            "examples" : {
-              "application/xml" : "{\n        \"Sku\": \"Sandisk3\",\n        \"MarketplaceID\": 10020,\n        \"SystemManaged\": false\n    }"
-            }
-          },
-          "400" : {
-            "description" : "Invalid username/password supplied"
-          }
-        }
-      }
-    },
     "/batchStatuses/{batchID:guid}" : {
       "get" : {
-        "summary" : "Request batch status",
-        "parameters" : [ {
-          "name" : "batchID",
-          "in" : "query",
-          "required" : true,
-          "type" : "integer",
-          "description" : "The ID GUID of the batch you want the status of",
-          "x-example" : "a1e7fd1a-3038-4238-adc6-16d9efdb198b"
-        } ],
+        "tags" : [ "Batch Status" ],
+        "summary" : "Returns batch status",
+        "description" : "Returns the status for a batch.",
+        "parameters" : [ ],
         "responses" : {
           "102" : {
             "description" : "Processing - the batch request is currently processing"
@@ -318,14 +291,39 @@
         "name" : "batchID:guid",
         "in" : "path",
         "required" : true,
-        "type" : "string"
+        "type" : "string",
+        "description" : "The ID GUID of the batch you want the status of",
+        "x-example" : "a1e7fd1a-3038-4238-adc6-16d9efdb198b"
       } ]
+    },
+    "/systemManaged" : {
+      "get" : {
+        "tags" : [ "Managed Listing" ],
+        "summary" : "Returns managed status",
+        "description" : "Returns which of your listings are managed or not",
+        "produces" : [ "application/json" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/Managed Listings"
+            },
+            "examples" : {
+              "application/json" : "{\n        \"Sku\": \"Sandisk3\",\n        \"MarketplaceID\": 10020,\n        \"SystemManaged\": false\n    }"
+            }
+          },
+          "400" : {
+            "description" : "Invalid username/password supplied"
+          }
+        }
+      }
     }
   },
   "definitions" : {
     "Price" : {
       "type" : "object",
-      "required" : [ "SKU", "marketplaceID" ],
+      "required" : [ "CostCurrency", "SKU", "marketplaceID" ],
       "properties" : {
         "marketplaceID" : {
           "type" : "integer",
@@ -334,8 +332,8 @@
         },
         "SKU" : {
           "type" : "string",
-          "example" : "EU-L9FK-6II9",
-          "description" : "SKU of the listing"
+          "description" : "SKU of the listing",
+          "example" : "EU-L9FK-6II9"
         },
         "userID" : {
           "type" : "integer",
@@ -364,8 +362,8 @@
         },
         "MapPrice" : {
           "type" : "integer",
-          "description" : "The minimum advertised price of your listing",
-          "example" : "4.00"
+          "description" : "Amazon only field. Set  a MAP  price on Amazon to hide your item price, until the item has been added to a customer's cart.",
+          "example" : "2.33"
         },
         "Cost" : {
           "type" : "integer",
@@ -374,50 +372,35 @@
         },
         "CostCurrency" : {
           "type" : "integer",
-          "description" : "Numerical value representing the type of currency your item is sold in",
-          "example" : 1
+          "description" : "The currency you are selling your item in",
+          "example" : "CAD"
         }
       },
       "example" : "  {\n        \"Sku\": \"FISDIGCAM\",\n        \"UserID\": 8208,\n        \"MarketplaceID\": 10020,\n        \"MinPrice\": 2.46,\n        \"MaxPrice\": 4.32,\n        \"CurrentPrice\": 30,\n        \"CurrentShipping\": null,\n        \"MapPrice\": null,\n        \"Cost\": 7.01,\n        \"CostCurrency\": 1\n    }"
     },
     "Strategy" : {
       "type" : "object",
+      "required" : [ "SKU", "marketplaceID" ],
       "properties" : {
-        "SKU" : {
+        "marketplaceID" : {
           "type" : "integer",
-          "description" : "SKU of listing"
+          "description" : "ID of your marketplace",
+          "example" : 10200
+        },
+        "SKU" : {
+          "type" : "string",
+          "description" : "SKU of listing",
+          "example" : "EU-L9FK-6II9"
         },
         "strategyID" : {
           "type" : "integer",
-          "description" : "ID of the strategy"
-        },
-        "marketplaceID" : {
-          "type" : "integer",
-          "description" : "ID of your marketplace"
+          "description" : "ID of the strategy",
+          "example" : 123599
         },
         "listingType" : {
           "type" : "string",
           "description" : "The type of listing",
-          "enum" : [ "Amazon MFN", "Amazon FBA" ]
-        }
-      }
-    },
-    "Managed Listings" : {
-      "type" : "object",
-      "properties" : {
-        "SKU" : {
-          "type" : "integer",
-          "description" : "SKU of the listing"
-        },
-        "marketplaceID" : {
-          "type" : "integer",
-          "description" : "ID of your marketplace",
-          "example" : 10020
-        },
-        "systemManaged" : {
-          "type" : "boolean",
-          "example" : false,
-          "description" : "Status of your listing"
+          "enum" : [ "Amazon MFN", "Amazon FBA", "eBay Auction", "eBay Fixed Price" ]
         }
       }
     },
@@ -433,8 +416,8 @@
         },
         "OperationType" : {
           "type" : "string",
-          "example" : "UpdateSystemManaged",
-          "description" : "Description of the batch"
+          "description" : "Description of the batch",
+          "example" : "UpdateSystemManaged"
         },
         "RequestedDate" : {
           "type" : "string",
@@ -446,6 +429,31 @@
           "type" : "string",
           "description" : "The status of your batch",
           "enum" : [ "Processing", "Succeeded", "Failed" ]
+        },
+        "ProcessedDate" : {
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "The date the batch finished processing",
+          "example" : "2017-09-25T16:44:11.123"
+        }
+      }
+    },
+    "Managed Listings" : {
+      "type" : "object",
+      "properties" : {
+        "SKU" : {
+          "type" : "string",
+          "description" : "SKU of the listing"
+        },
+        "marketplaceID" : {
+          "type" : "integer",
+          "description" : "ID of your marketplace",
+          "example" : 10020
+        },
+        "systemManaged" : {
+          "type" : "boolean",
+          "description" : "Status of your listing",
+          "example" : false
         }
       }
     }
