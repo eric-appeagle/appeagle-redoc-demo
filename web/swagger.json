@@ -1,7 +1,7 @@
 {
   "swagger" : "2.0",
   "info" : {
-    "description" : "# Hello and welcome to Appeagles API! \n# \n\nYou can use this API to access all our API endpoints, such as:\n**Price\nStrategy\nManaged Listings\nBatch status**\n\n\nThe API is organized around REST. Requests should be made over HTTPS. All request and response bodies, including errors, are formatted in JSON and encoded in UTF-8.\n\n\n## Authentication**\n## \nAuthentication is done via the API key which you can request by going to the appeagle developer portal (http://dev.appeagle.com). <need instructions for the dev portal here>Requests are authenticated using HTTP Basic Auth. Provide your API key as the basic auth username. You do not need to provide a password.**\n\n## **Rate Limiting**\n\nOur API returns 200 records per request.\n",
+    "description" : "Hello and welcome to Appeagles API!  You can use this API to access all our API endpoints, such as: Price Strategy Managed Listings Batch status. The API is organized around REST. Requests should be made over HTTPS. \n\n",
     "version" : "1.0.3",
     "title" : "Appeagle API",
     "termsOfService" : "http://swagger.io/terms/",
