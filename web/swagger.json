@@ -1,7 +1,8 @@
+
 {
   "swagger" : "2.0",
   "info" : {
-    "description" : "",
+    "description" : "test description",
     "version" : "1.0.3",
     "title" : "Appeagle API",
     "termsOfService" : "http://swagger.io/terms/",
