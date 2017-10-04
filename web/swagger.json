@@ -1,8 +1,7 @@
-
 {
   "swagger" : "2.0",
   "info" : {
-    "description" : "test description",
+    "description" : "# Hello and welcome to Appeagles API! \n# \n\nYou can use this API to access all our API endpoints, such as:\n**Price\nStrategy\nManaged Listings\nBatch status**\n\n\nThe API is organized around REST. Requests should be made over HTTPS. All request and response bodies, including errors, are formatted in JSON and encoded in UTF-8.\n\n\n## Authentication**\n## \nAuthentication is done via the API key which you can request by going to the appeagle developer portal (http://dev.appeagle.com). <need instructions for the dev portal here>Requests are authenticated using HTTP Basic Auth. Provide your API key as the basic auth username. You do not need to provide a password.**\n\n## **Rate Limiting**\n\nOur API returns 200 records per request.\n",
     "version" : "1.0.3",
     "title" : "Appeagle API",
     "termsOfService" : "http://swagger.io/terms/",
@@ -49,10 +48,7 @@
         "type" : "integer",
         "description" : "ID of the marketplace you want to get pricing information for",
         "x-example" : 10200
-      } ],
-      "x-restlet" : {
-        "section" : "Price"
-      }
+      } ]
     },
     "/price" : {
       "post" : {
@@ -104,9 +100,6 @@
             "description" : "Invalid ID or SKU"
           }
         }
-      },
-      "x-restlet" : {
-        "section" : "Price"
       }
     },
     "/prices/{marketplaceID:int}/{SKU}" : {
@@ -144,10 +137,7 @@
         "type" : "string",
         "description" : "The SKU of your listing",
         "x-example" : "EU-L9FK-6II9"
-      } ],
-      "x-restlet" : {
-        "section" : "Price"
-      }
+      } ]
     },
     "/strategyMappings/{marketplaceID:int}" : {
       "get" : {
@@ -178,10 +168,7 @@
         "type" : "string",
         "description" : "The ID of your marketplace",
         "x-example" : "10020"
-      } ],
-      "x-restlet" : {
-        "section" : "Strategy"
-      }
+      } ]
     },
     "/strategyMappings/{marketplaceID:int}/{SKU}" : {
       "get" : {
@@ -219,10 +206,7 @@
         "type" : "string",
         "description" : "The SKU of your listing",
         "x-example" : "EU-L9FK-6II9"
-      } ],
-      "x-restlet" : {
-        "section" : "Strategy"
-      }
+      } ]
     },
     "/strategyMappings" : {
       "post" : {
@@ -274,9 +258,6 @@
             "description" : "Invalid ID"
           }
         }
-      },
-      "x-restlet" : {
-        "section" : "Strategy"
       }
     },
     "/batchStatuses/{batchID:guid}" : {
@@ -313,10 +294,7 @@
         "type" : "string",
         "description" : "The ID GUID of the batch you want the status of",
         "x-example" : "a1e7fd1a-3038-4238-adc6-16d9efdb198b"
-      } ],
-      "x-restlet" : {
-        "section" : "Batch Status"
-      }
+      } ]
     },
     "/systemManaged" : {
       "get" : {
@@ -339,9 +317,6 @@
             "description" : "Invalid username/password supplied"
           }
         }
-      },
-      "x-restlet" : {
-        "section" : "Managed Listings"
       }
     }
   },
@@ -357,8 +332,8 @@
         },
         "SKU" : {
           "type" : "string",
-          "example" : "EU-L9FK-6II9",
-          "description" : "SKU of the listing"
+          "description" : "SKU of the listing",
+          "example" : "EU-L9FK-6II9"
         },
         "userID" : {
           "type" : "integer",
@@ -401,10 +376,7 @@
           "example" : "CAD"
         }
       },
-      "example" : "  {\n        \"Sku\": \"FISDIGCAM\",\n        \"UserID\": 8208,\n        \"MarketplaceID\": 10020,\n        \"MinPrice\": 2.46,\n        \"MaxPrice\": 4.32,\n        \"CurrentPrice\": 30,\n        \"CurrentShipping\": null,\n        \"MapPrice\": null,\n        \"Cost\": 7.01,\n        \"CostCurrency\": 1\n    }",
-      "x-restlet" : {
-        "section" : "Price"
-      }
+      "example" : "  {\n        \"Sku\": \"FISDIGCAM\",\n        \"UserID\": 8208,\n        \"MarketplaceID\": 10020,\n        \"MinPrice\": 2.46,\n        \"MaxPrice\": 4.32,\n        \"CurrentPrice\": 30,\n        \"CurrentShipping\": null,\n        \"MapPrice\": null,\n        \"Cost\": 7.01,\n        \"CostCurrency\": 1\n    }"
     },
     "Strategy" : {
       "type" : "object",
@@ -417,8 +389,8 @@
         },
         "SKU" : {
           "type" : "string",
-          "example" : "EU-L9FK-6II9",
-          "description" : "SKU of listing"
+          "description" : "SKU of listing",
+          "example" : "EU-L9FK-6II9"
         },
         "strategyID" : {
           "type" : "integer",
@@ -430,9 +402,6 @@
           "description" : "The type of listing",
           "enum" : [ "Amazon MFN", "Amazon FBA", "eBay Auction", "eBay Fixed Price" ]
         }
-      },
-      "x-restlet" : {
-        "section" : "Strategy"
       }
     },
     "Batch Status" : {
@@ -447,8 +416,8 @@
         },
         "OperationType" : {
           "type" : "string",
-          "example" : "UpdateSystemManaged",
-          "description" : "Description of the batch"
+          "description" : "Description of the batch",
+          "example" : "UpdateSystemManaged"
         },
         "RequestedDate" : {
           "type" : "string",
@@ -467,9 +436,6 @@
           "description" : "The date the batch finished processing",
           "example" : "2017-09-25T16:44:11.123"
         }
-      },
-      "x-restlet" : {
-        "section" : "Batch Status"
       }
     },
     "Managed Listings" : {
@@ -486,48 +452,9 @@
         },
         "systemManaged" : {
           "type" : "boolean",
-          "example" : false,
-          "description" : "Status of your listing"
+          "description" : "Status of your listing",
+          "example" : false
         }
-      },
-      "x-restlet" : {
-        "section" : "Managed Listings"
-      }
-    }
-  },
-  "x-restlet" : {
-    "sections" : {
-      "Hello and welcome to Appeagle's API!" : {
-        "description" : "## You can use this API to access all our API endpoints, such as:\n## \n* Price\n* Strategy\n* Managed Listings\n* Batch status\n\n"
-      },
-      "Price" : {
-        "description" : "Use this API endpoint to retrieve or change the pricing information of your listings. \n\nTo retrieve pricing information for a specific listing, you need the marketplace ID and the SKU.\n"
-      },
-      "Strategy" : {
-        "description" : "The strategy API returns which listings are mapped to which strategy. You can also use it to change a listing’s strategy."
-      },
-      "Batch Status" : {
-        "description" : "Use Batch Status to determine the status of a batch processing request."
-      },
-      "Managed Listings" : {
-        "description" : "The Managed Listings API returns which of your listings are managed or not. "
-      }
-    },
-    "texts" : {
-      "e1dr5j9" : {
-        "title" : "Authentication",
-        "content" : "Authentication is done via the API key which you can request by going to the appeagle developer portal (http://dev.appeagle.com). <need instructions for the dev portal here> Requests are authenticated using HTTP Basic Auth. Provide your API key as the basic auth username. You do not need to provide a password.\n",
-        "section" : "Hello and welcome to Appeagle's API!"
-      },
-      "r56fpxh" : {
-        "title" : "Rate Limiting",
-        "content" : "The Appeagle API returns 200 records per request.\n",
-        "section" : "Hello and welcome to Appeagle's API!"
-      },
-      "rag1uen" : {
-        "title" : "Status Codes",
-        "content" : "Our API returns standard HTTP response codes. Examples of codes we use are:\n\n| Response | Description  | \n| -------- | -------- | -------- |\n| 200     | OK. Everything worked as planned.     | \n| 400     | Bad Request. The request was not accepted     | \n| 401     | Unauthorized. The API key provided was not valid.     |\n| 402     | Request Failed. The parameters were valid but the request failed.     | \n| 404     | Not Found. The resource doesn't exist.     | \n| 409     | Conflict. The request conflicts with another request (perhaps due to using the same idempotent key).     | \n| 429     | Too Many Requests. The API received too many requests.      | \n| 500, 502, 503, 504     | Server Errors. There was an issue with Appeagle’s API.     |\n\n\n",
-        "section" : "Hello and welcome to Appeagle's API!"
       }
     }
   }
