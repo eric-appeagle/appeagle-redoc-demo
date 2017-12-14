@@ -1,480 +1,577 @@
 {
-  "swagger": "2.0",
-  "info": {
-    "version": "2017-08-29T16:04:08Z",
-    "title": "PublicApiTest"
-  },
-  "host": "clb83w9o1g.execute-api.us-east-1.amazonaws.com",
-  "basePath": "/TestTomo",
-  "schemes": [
-    "https"
-  ],
-  "paths": {
-    "/": {
-      "get": {
-        "description": "This is the main GET method on the / resource",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/Empty"
-            }
-          }
-        }
-      }
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "The Informed.co API is organized around REST. Our API has predictable, resource-oriented URLs, and uses HTTP response codes to indicate API errors. We use built-in HTTP features, like HTTP authentication and HTTP verbs, which are understood by off-the-shelf HTTP clients. We support cross-origin resource sharing, allowing you to interact securely with our API from a client-side web application (though you should never expose your secret API key in any public website's client-side code). JSON is returned by all API responses, including errors, although our API libraries convert responses to appropriate language-specific objects.",
+    "version" : "1.0.4",
+    "title" : "Informed.co API",
+    "termsOfService" : "http://swagger.io/terms/",
+    "contact" : {
+      "name" : "Mark Hanna",
+      "email" : "mark@appeagle.com"
     },
-    "/batchstatuses": {
-      "get": {
-        "summary": "Batch Statuses",
-        "description": "THis is a summary for batchstatuses path.",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "x-api-key",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A list was retrieved successfully",
-            "headers": {
-              "Rate-Limit-Limit": {
-                "description": "The number of allowed requests in the current period",
-                "type": "integer"
-              },
-              "Rate-Limit-Remaining": {
-                "description": "The number of remaining requests in the current period",
-                "type": "integer"
-              },
-              "Rate-Limit-Reset": {
-                "description": "The date in format defined by [RFC 822](https://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.3.1)\nwhen the current period will reset\n",
-                "type": "string"
-              },
-              "Pagination-Total": {
-                "description": "Total items count",
-                "type": "integer"
-              },
-              "Pagination-Limit": {
-                "description": "Items per page limit",
-                "type": "integer"
-              },
-              "Pagination-Offset": {
-                "description": "Pagination offset",
-                "type": "integer"
-              }
+    "license" : {
+      "name" : "Apache 2.0",
+      "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "host" : "api.informed.co",
+  "schemes" : [ "http" ],
+  "consumes" : [ "application/json" ],
+  "produces" : [ "application/json" ],
+  "paths" : {
+    "/price/{marketplaceID}" : {
+      "get" : {
+        "tags" : [ "price" ],
+        "summary" : "Returns listing pricing",
+        "description" : "Returns pricing information for a specific listing",
+        "produces" : [ "application/json" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/Price"
             },
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/ThreeDSecure"
+            "examples" : {
+              "application/json" : "    {\n        \"Sku\": \"FISDIGCAM\",\n        \"UserID\": 8208,\n        \"MarketplaceID\": 10020,\n        \"MinPrice\": 2.46,\n        \"MaxPrice\": 6.99,\n        \"CurrentPrice\": 5.15,\n        \"CurrentShipping\": 1.50,\n        \"MapPrice\": 2.25,\n        \"Cost\": 2.01,\n        \"CostCurrency\": 1\n    }\n"
+            }
+          },
+          "400" : {
+            "description" : "Invalid ID"
+          }
+        }
+      },
+      "parameters" : [ {
+        "name" : "marketplaceID",
+        "in" : "path",
+        "required" : true,
+        "type" : "string"
+      } ]
+    },
+    "/price" : {
+      "post" : {
+        "tags" : [ "price" ],
+        "summary" : "Update multiple listing prices",
+        "description" : "Batch update listing pricing information",
+        "consumes" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "body",
+          "in" : "body",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Price"
+          },
+          "x-examples" : {
+            "application/json" : "[    \n       {\n        \"marketplaceID\": 10200,\n        \"SKU\": EU-L9FK-6II9,\n        \"MinPrice\": 2.46,\n        \"MaxPrice\": 6.99,\n        \"CurrentPrice\": 5.15,\n        \"CurrentShipping\": 1.50,\n        \"MapPrice\": 2.25,\n        \"Cost\": 2.01,\n        \"CostCurrency\": 1\n       }\n       {\n        \"marketplaceID\": 10200,\n        \"SKU\": EU-L9FK-7789,\n        \"MinPrice\": 2.55,\n        \"MaxPrice\": 8.99,\n        \"CurrentPrice\": 4.19,\n        \"CurrentShipping\": 1.50,\n        \"MapPrice\": 2.99,\n        \"Cost\": 3.21,\n        \"CostCurrency\": 1\n        }\n  ]"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Your pricing changes were successful"
+          },
+          "400" : {
+            "description" : "Invalid ID"
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "price" ],
+        "summary" : "Update a listing's price data",
+        "description" : "Update pricing for a single listing",
+        "consumes" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "body",
+          "in" : "body",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Price"
+          },
+          "x-examples" : {
+            "application/json" : "    {\n        \"marketplaceID\": 10200,\n        \"SKU\": EU-L9FK-6II9,\n        \"MinPrice\": 2.46,\n        \"MaxPrice\": 6.99,\n        \"CurrentPrice\": 5.15,\n        \"CurrentShipping\": 1.50,\n        \"MapPrice\": 2.25,\n        \"Cost\": 2.01,\n        \"CostCurrency\": 1\n    }"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Your pricing changes were successful"
+          },
+          "400" : {
+            "description" : "Invalid ID or SKU"
+          }
+        }
+      }
+    },
+    "/prices/{marketplaceID}/{SKU}" : {
+      "get" : {
+        "tags" : [ "price" ],
+        "summary" : "Returns pricing info",
+        "description" : "Returns pricing information for listings in a marketplace",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/Price"
+            },
+            "examples" : {
+              "application/json" : "[\n    {\n        \"Sku\": \"EU-L9FK-6II9\",\n        \"UserID\": 8208,\n        \"MarketplaceID\": 10020,\n        \"MinPrice\": 2.46,\n        \"MaxPrice\": 4.32,\n        \"CurrentPrice\": 30,\n        \"CurrentShipping\": 5.02,\n        \"MapPrice\": 0.02,\n        \"Cost\": 7.01,\n        \"CostCurrency\": 1\n    },\n    {\n        \"Sku\": \"FISDIGCAM\",\n        \"UserID\": 8208,\n        \"MarketplaceID\": 10020,\n        \"MinPrice\": 2.46,\n        \"MaxPrice\": 4.32,\n        \"CurrentPrice\": 30,\n        \"CurrentShipping\": null,\n        \"MapPrice\": null,\n        \"Cost\": 7.01,\n        \"CostCurrency\": 1\n    }\n]\n"
+            }
+          },
+          "400" : {
+            "description" : "Invalid ID"
+          }
+        }
+      },
+      "parameters" : [ {
+        "name" : "SKU",
+        "in" : "path",
+        "required" : true,
+        "type" : "string",
+        "description" : "The SKU of your listing",
+        "x-example" : "EU-L9FK-6II9"
+      }, {
+        "name" : "marketplaceID",
+        "in" : "path",
+        "required" : true,
+        "type" : "string"
+      } ]
+    },
+    "/strategyMappings/{marketplaceID}" : {
+      "get" : {
+        "tags" : [ "strategy" ],
+        "summary" : "Returns strategies",
+        "description" : "Returns which listings are mapped to which strategy by marketplace.",
+        "produces" : [ "application/xml", "application/json" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/Strategy"
+            },
+            "examples" : {
+              "application/xml" : "{\n        \"Sku\": \"EU-L9FK-6II9\",\n        \"StrategyID\": 25109,\n        \"MarketplaceID\": 10020,\n        \"ListingType\": \"Amazon MFN\"\n    }\n"
+            }
+          },
+          "400" : {
+            "description" : "Invalid ID"
+          }
+        }
+      },
+      "parameters" : [ {
+        "name" : "marketplaceID",
+        "in" : "path",
+        "required" : true,
+        "type" : "string"
+      } ]
+    },
+    "/strategyMappings/{marketplaceID}/{SKU}" : {
+      "get" : {
+        "tags" : [ "strategy" ],
+        "summary" : "Returns specific listing's strategy",
+        "description" : "Retrieve a specific listing's strategy",
+        "produces" : [ "application/xml", "application/json" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/Strategy"
+            },
+            "examples" : {
+              "application/xml" : "{\n        \"SKU\": \"EU-L9FK-6II9\",\n        \"StrategyID\": 25109,\n        \"MarketplaceID\": 10020,\n        \"ListingType\": \"Amazon MFN\"\n    }\n"
+            }
+          },
+          "400" : {
+            "description" : "Invalid ID"
+          }
+        }
+      },
+      "parameters" : [ {
+        "name" : "SKU",
+        "in" : "path",
+        "required" : true,
+        "type" : "string",
+        "description" : "The SKU of your listing",
+        "x-example" : "EU-L9FK-6II9"
+      }, {
+        "name" : "marketplaceID",
+        "in" : "path",
+        "required" : true,
+        "type" : "string"
+      } ]
+    },
+    "/strategyMappings" : {
+      "post" : {
+        "tags" : [ "strategy" ],
+        "summary" : "Update multiple strategies",
+        "description" : "Batch update the strategy of multiple listings.",
+        "consumes" : [ ],
+        "parameters" : [ {
+          "name" : "body",
+          "in" : "body",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Strategy"
+          },
+          "x-examples" : {
+            "application/json" : "[ \n  {\n        \"SKU\": \"EU-L9FK-6II9\",\n        \"StrategyID\": 25109,\n        \"MarketplaceID\": 10020,\n    },\n{\n        \"SKU\": \"EU-L9FK-6688\",\n        \"StrategyID\": 35550,\n        \"MarketplaceID\": 10020,\n    }\n]    "
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful Operation"
+          },
+          "400" : {
+            "description" : "Invalid ID"
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "strategy" ],
+        "summary" : "Update single strategy",
+        "description" : "Update the strategy of a single listing.",
+        "consumes" : [ ],
+        "parameters" : [ {
+          "name" : "body",
+          "in" : "body",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Strategy"
+          },
+          "x-examples" : {
+            "application/json" : "{\n        \"SKU\": \"EU-L9FK-6II9\",\n        \"StrategyID\": 25109,\n        \"MarketplaceID\": 10020,\n    }"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation"
+          },
+          "400" : {
+            "description" : "Invalid ID"
+          }
+        }
+      }
+    },
+    "/batchStatuses/{batchID}" : {
+      "get" : {
+        "tags" : [ "Batch Status" ],
+        "summary" : "Returns batch status",
+        "description" : "Returns the status for a batch.",
+        "parameters" : [ ],
+        "responses" : {
+          "102" : {
+            "description" : "Processing - the batch request is currently processing"
+          },
+          "200" : {
+            "description" : "Successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/Batch Status"
+            },
+            "examples" : {
+              "application/json" : "{\n        \"BatchID\": \"a1e7fd1a-3038-4238-adc6-16d9efdb198b\",\n        \"OperationType\": \"UpdateSystemManaged\",\n        \"RequestedDate\": \"2017-08-15T13:50:15.123\",\n        \"Status\": \"Succeeded\",\n        \"ProcessedDate\": null,\n}"
+            }
+          },
+          "400" : {
+            "description" : "Batch ID does not exist"
+          },
+          "417" : {
+            "description" : "Failed - there was an error processing this batch request"
+          }
+        }
+      },
+      "parameters" : [ {
+        "name" : "batchID",
+        "in" : "path",
+        "required" : true,
+        "type" : "string"
+      } ]
+    },
+    "/systemManaged" : {
+      "get" : {
+        "tags" : [ "Managed Listing" ],
+        "summary" : "Returns managed status",
+        "description" : "Returns which of your listings are managed or not",
+        "produces" : [ "application/json" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/Managed Listings"
+            },
+            "examples" : {
+              "application/json" : "{\n        \"Sku\": \"Sandisk3\",\n        \"MarketplaceID\": 10020,\n        \"SystemManaged\": false\n    }"
+            }
+          },
+          "400" : {
+            "description" : "Invalid username/password supplied"
+          }
+        }
+      }
+    },
+    "/feed" : {
+      "post" : {
+        "tags" : [ "Uploads" ],
+        "summary" : "Upload a listings document",
+        "description" : "This method uploads a multipart file with CSV or TXT file extension.",
+        "consumes" : [ "text/csv", "text/plain" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "x-api-key",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "description" : "This is your private API key you can get by visiting https://app.informed.com/integrations",
+          "x-example" : "AE746A82-E74A-4D62-B801-43B5A19973F7"
+        }, {
+          "name" : "body",
+          "in" : "body",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "binary",
+            "description" : "This file should be a modified version of an export from Informed.co. All field names should match the field names in the export. "
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Status 200",
+            "schema" : {
+              "type" : "string",
+              "description" : "A unique GUID representing a FeedRequestID is returned, which can later be used to get the status of that Feed Request."
+            },
+            "examples" : {
+              "application/json" : "B7EB50A9-4F8A-41C5-B7BB-695F9CEECDAC"
+            }
+          }
+        }
+      }
+    },
+    "/feed/feedRequestStatuses" : {
+      "get" : {
+        "tags" : [ "Uploads" ],
+        "summary" : "Get feed request list",
+        "description" : "Returns a list of Feed Request Status objects",
+        "parameters" : [ {
+          "name" : "fromDate",
+          "in" : "query",
+          "required" : false,
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "Optional date time representing minimum date for requested statuses",
+          "x-example" : "mm/dd/yyyy"
+        }, {
+          "name" : "toDate",
+          "in" : "query",
+          "required" : false,
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "Optional date time representing maximum date for requested statuses",
+          "x-example" : "mm/dd/yyyy"
+        }, {
+          "name" : "x-api-key",
+          "in" : "header",
+          "required" : false,
+          "type" : "string",
+          "description" : "This is your private API key you can get by visiting https://app.informed.com/integrations",
+          "x-example" : "B7EB50A9-4F8A-41C5-B7BB-695F9CEECDAC"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Status 200",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/FeedRequestStatus"
               }
             }
           }
         }
       }
-    },
-    "/batchstatuses/{batchId}": {
-      "get": {
-        "description": "This is the GET method under batchid",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "x-api-key",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "batchId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/Empty"
-            }
-          }
-        },
-        "security": [
-          {
-            "api_key": [ ]
-          }
-        ]
-      }
-    },
-    "/prices": {
-      "get": {
-        "description": "This is documentation under prices for GET",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "x-api-key",
-            "in": "header",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/Empty"
-            }
-          }
-        },
-        "security": [
-          {
-            "api_key": [ ]
-          }
-        ]
-      },
-      "post": {
-        "description": "This is documentation under prices for POST",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "x-api-key",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/Empty"
-            }
-          }
-        },
-        "security": [
-          {
-            "api_key": [ ]
-          }
-        ]
-      },
-      "put": {
-        "description": "This is documentation under prices for PUT",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "x-api-key",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/Empty"
-            }
-          }
-        },
-        "security": [
-          {
-            "api_key": [ ]
-          }
-        ]
-      }
-    },
-    "/prices/{marketplaceId}": {
-      "get": {
-        "description": "GET method under marketplaceId",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "marketplaceId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "x-api-key",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/Empty"
-            }
-          }
-        }
-      }
-    },
-    "/prices/{marketplaceId}/{sku}": {
-      "get": {
-        "description": "This is the GET method under SKU of Prices",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "marketplaceId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "x-api-key",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "sku",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/Empty"
-            }
-          }
-        }
-      }
-    },
-    "/strategymappings": {
-      "get": {
-        "description": "GET method for strategymappings",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "x-api-key",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/Empty"
-            }
-          }
-        },
-        "security": [
-          {
-            "api_key": [ ]
-          }
-        ]
-      },
-      "post": {
-        "description": "POST method for strategymappings",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "x-api-key",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/Empty"
-            }
-          }
-        },
-        "security": [
-          {
-            "api_key": [ ]
-          }
-        ]
-      },
-      "put": {
-        "description": "This is a PUT method for the strategymappings path. ",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "x-api-key",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/Empty"
-            }
-          }
-        },
-        "security": [
-          {
-            "api_key": [ ]
-          }
-        ]
-      }
-    },
-    "/strategymappings/{marketplaceId}": {
-      "get": {
-        "description": "This is a GET method under the strategymappings path",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "marketplaceId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "x-api-key",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/Empty"
-            }
-          }
-        }
-      }
-    },
-    "/systemmanaged": {
-      "get": {
-        "description": "This is the GET method under systemmanaged path",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "x-api-key",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/Empty"
-            }
-          }
-        },
-        "security": [
-          {
-            "api_key": [ ]
-          }
-        ]
-      },
-      "post": {
-        "description": "This is the POST method under the systemmanaged",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "x-api-key",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/Empty"
-            }
-          }
-        },
-        "security": [
-          {
-            "api_key": [ ]
-          }
-        ]
-      },
-      "put": {
-        "description": "This is the PUT method under the systemmanaged path",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "x-api-key",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/Empty"
-            }
-          }
-        },
-        "security": [
-          {
-            "api_key": [ ]
-          }
-        ]
-      }
     }
   },
-  "securityDefinitions": {
-    "api_key": {
-      "type": "apiKey",
-      "name": "x-api-key",
-      "in": "header"
-    }
-  },
-  "definitions": {
-    "Empty": {
-      "type": "object",
-      "title": "Empty Schema"
+  "definitions" : {
+    "Price" : {
+      "type" : "object",
+      "required" : [ "CostCurrency", "SKU", "marketplaceID" ],
+      "properties" : {
+        "marketplaceID" : {
+          "type" : "integer",
+          "description" : "The ID of your marketplace",
+          "example" : 10020
+        },
+        "SKU" : {
+          "type" : "string",
+          "description" : "SKU of the listing",
+          "example" : "EU-L9FK-6II9"
+        },
+        "userID" : {
+          "type" : "integer",
+          "description" : "Your Appeagle user ID",
+          "example" : 8202
+        },
+        "MinPrice" : {
+          "type" : "integer",
+          "description" : "Minimum price of your listing",
+          "example" : "2.33"
+        },
+        "MaxPrice" : {
+          "type" : "integer",
+          "description" : "Maximum Price of your listings",
+          "example" : "5.14"
+        },
+        "CurrentPrice" : {
+          "type" : "integer",
+          "description" : "The current price of your listing",
+          "example" : "3.55"
+        },
+        "CurrentShipping" : {
+          "type" : "integer",
+          "description" : "Cost of shipping for your listing",
+          "example" : "0.19"
+        },
+        "MapPrice" : {
+          "type" : "integer",
+          "description" : "Amazon only field. Set  a MAP  price on Amazon to hide your item price, until the item has been added to a customer's cart.",
+          "example" : "2.33"
+        },
+        "Cost" : {
+          "type" : "integer",
+          "description" : "Cost of your item",
+          "example" : "1.44"
+        },
+        "CostCurrency" : {
+          "type" : "integer",
+          "description" : "The currency you are selling your item in",
+          "example" : "CAD"
+        }
+      },
+      "example" : "  {\n        \"Sku\": \"FISDIGCAM\",\n        \"UserID\": 8208,\n        \"MarketplaceID\": 10020,\n        \"MinPrice\": 2.46,\n        \"MaxPrice\": 4.32,\n        \"CurrentPrice\": 30,\n        \"CurrentShipping\": null,\n        \"MapPrice\": null,\n        \"Cost\": 7.01,\n        \"CostCurrency\": 1\n    }"
+    },
+    "Strategy" : {
+      "type" : "object",
+      "required" : [ "SKU", "marketplaceID" ],
+      "properties" : {
+        "marketplaceID" : {
+          "type" : "integer",
+          "description" : "ID of your marketplace",
+          "example" : 10200
+        },
+        "SKU" : {
+          "type" : "string",
+          "description" : "SKU of listing",
+          "example" : "EU-L9FK-6II9"
+        },
+        "strategyID" : {
+          "type" : "integer",
+          "description" : "ID of the strategy",
+          "example" : 123599
+        },
+        "listingType" : {
+          "type" : "string",
+          "description" : "The type of listing",
+          "enum" : [ "Amazon MFN", "Amazon FBA", "eBay Auction", "eBay Fixed Price" ]
+        }
+      }
+    },
+    "Batch Status" : {
+      "type" : "object",
+      "required" : [ "batchID" ],
+      "properties" : {
+        "batchID" : {
+          "type" : "integer",
+          "format" : "int64",
+          "description" : "The ID of the batch",
+          "example" : "a1e7fd1a-3038-4238-adc6-16d9efdb198b"
+        },
+        "OperationType" : {
+          "type" : "string",
+          "description" : "Description of the batch",
+          "example" : "UpdateSystemManaged"
+        },
+        "RequestedDate" : {
+          "type" : "string",
+          "format" : "date",
+          "description" : "Date of the request",
+          "example" : "2017-08-15T13:50:15.123"
+        },
+        "Status" : {
+          "type" : "string",
+          "description" : "The status of your batch",
+          "enum" : [ "Processing", "Succeeded", "Failed" ]
+        },
+        "ProcessedDate" : {
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "The date the batch finished processing",
+          "example" : "2017-09-25T16:44:11.123"
+        }
+      }
+    },
+    "Managed Listings" : {
+      "type" : "object",
+      "properties" : {
+        "SKU" : {
+          "type" : "string",
+          "description" : "SKU of the listing"
+        },
+        "marketplaceID" : {
+          "type" : "integer",
+          "description" : "ID of your marketplace",
+          "example" : 10020
+        },
+        "systemManaged" : {
+          "type" : "boolean",
+          "description" : "Status of your listing",
+          "example" : false
+        }
+      }
+    },
+    "FeedRequestStatus" : {
+      "type" : "object",
+      "properties" : {
+        "FeedRequestID" : {
+          "type" : "string",
+          "description" : "A unique identifier for this feed request.",
+          "example" : "B7EB50A9-4F8A-41C5-B7BB-695F9CEECDAC"
+        },
+        "Status" : {
+          "type" : "string",
+          "description" : "A string representation of the status of the feed request.",
+          "enum" : [ "pending", "completed" ]
+        },
+        "StatusDescription" : {
+          "type" : "string",
+          "description" : "Extra details about the status of the upload"
+        },
+        "RequestedDate" : {
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "The date the feed request was received"
+        },
+        "ProcessDate" : {
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "The date the feed request was processed"
+        },
+        "SuccessCount" : {
+          "type" : "integer",
+          "description" : "A count of how many listings in the file were completely and successfully updated"
+        },
+        "ErrorCount" : {
+          "type" : "integer",
+          "description" : "A count of how many listings in the file were not processed due to an error or validation problem"
+        },
+        "FeedTitle" : {
+          "type" : "string",
+          "description" : "The original file name"
+        },
+        "ErrorMessage" : {
+          "type" : "string",
+          "description" : "A custom message representing any large issue related to the upload"
+        }
+      },
+      "description" : "An object representing all data related to a feed upload request"
     }
   }
 }
