@@ -1,9 +1,9 @@
 {
   "swagger" : "2.0",
   "info" : {
-    "description" : "Hello and welcome to Appeagles API!  You can use this API to access all our API endpoints, such as: Price Strategy Managed Listings Batch status. The API is organized around REST. Requests should be made over HTTPS. \n\n",
-    "version" : "1.0.3",
-    "title" : "Appeagle API",
+    "description" : "The Informed.co API is organized around REST. Our API has predictable, resource-oriented URLs, and uses HTTP response codes to indicate API errors. We use built-in HTTP features, like HTTP authentication and HTTP verbs, which are understood by off-the-shelf HTTP clients. We support cross-origin resource sharing, allowing you to interact securely with our API from a client-side web application (though you should never expose your secret API key in any public website's client-side code). JSON is returned by all API responses, including errors, although our API libraries convert responses to appropriate language-specific objects.",
+    "version" : "1.0.4",
+    "title" : "Informed.co API",
     "termsOfService" : "http://swagger.io/terms/",
     "contact" : {
       "name" : "Mark Hanna",
@@ -19,7 +19,7 @@
   "consumes" : [ "application/json" ],
   "produces" : [ "application/json" ],
   "paths" : {
-    "/price/{marketplaceID:int}" : {
+    "/price/{marketplaceID}" : {
       "get" : {
         "tags" : [ "price" ],
         "summary" : "Returns listing pricing",
@@ -42,12 +42,10 @@
         }
       },
       "parameters" : [ {
-        "name" : "marketplaceID:int",
+        "name" : "marketplaceID",
         "in" : "path",
         "required" : true,
-        "type" : "integer",
-        "description" : "ID of the marketplace you want to get pricing information for",
-        "x-example" : 10200
+        "type" : "string"
       } ]
     },
     "/price" : {
@@ -102,7 +100,7 @@
         }
       }
     },
-    "/prices/{marketplaceID:int}/{SKU}" : {
+    "/prices/{marketplaceID}/{SKU}" : {
       "get" : {
         "tags" : [ "price" ],
         "summary" : "Returns pricing info",
@@ -124,22 +122,20 @@
         }
       },
       "parameters" : [ {
-        "name" : "marketplaceID:int",
-        "in" : "path",
-        "required" : true,
-        "type" : "string",
-        "description" : "The ID of the marketplace",
-        "x-example" : "10200"
-      }, {
         "name" : "SKU",
         "in" : "path",
         "required" : true,
         "type" : "string",
         "description" : "The SKU of your listing",
         "x-example" : "EU-L9FK-6II9"
+      }, {
+        "name" : "marketplaceID",
+        "in" : "path",
+        "required" : true,
+        "type" : "string"
       } ]
     },
-    "/strategyMappings/{marketplaceID:int}" : {
+    "/strategyMappings/{marketplaceID}" : {
       "get" : {
         "tags" : [ "strategy" ],
         "summary" : "Returns strategies",
@@ -162,15 +158,13 @@
         }
       },
       "parameters" : [ {
-        "name" : "marketplaceID:int",
+        "name" : "marketplaceID",
         "in" : "path",
         "required" : true,
-        "type" : "string",
-        "description" : "The ID of your marketplace",
-        "x-example" : "10020"
+        "type" : "string"
       } ]
     },
-    "/strategyMappings/{marketplaceID:int}/{SKU}" : {
+    "/strategyMappings/{marketplaceID}/{SKU}" : {
       "get" : {
         "tags" : [ "strategy" ],
         "summary" : "Returns specific listing's strategy",
@@ -193,19 +187,17 @@
         }
       },
       "parameters" : [ {
-        "name" : "marketplaceID:int",
-        "in" : "path",
-        "required" : true,
-        "type" : "integer",
-        "format" : "int64",
-        "x-example" : 10200
-      }, {
         "name" : "SKU",
         "in" : "path",
         "required" : true,
         "type" : "string",
         "description" : "The SKU of your listing",
         "x-example" : "EU-L9FK-6II9"
+      }, {
+        "name" : "marketplaceID",
+        "in" : "path",
+        "required" : true,
+        "type" : "string"
       } ]
     },
     "/strategyMappings" : {
@@ -260,7 +252,7 @@
         }
       }
     },
-    "/batchStatuses/{batchID:guid}" : {
+    "/batchStatuses/{batchID}" : {
       "get" : {
         "tags" : [ "Batch Status" ],
         "summary" : "Returns batch status",
@@ -288,12 +280,10 @@
         }
       },
       "parameters" : [ {
-        "name" : "batchID:guid",
+        "name" : "batchID",
         "in" : "path",
         "required" : true,
-        "type" : "string",
-        "description" : "The ID GUID of the batch you want the status of",
-        "x-example" : "a1e7fd1a-3038-4238-adc6-16d9efdb198b"
+        "type" : "string"
       } ]
     },
     "/systemManaged" : {
@@ -315,6 +305,42 @@
           },
           "400" : {
             "description" : "Invalid username/password supplied"
+          }
+        }
+      }
+    },
+    "/feed" : {
+      "post" : {
+        "summary" : "Upload a listings document",
+        "description" : "This method uploads a multipart file with CSV or TXT file extension.",
+        "consumes" : [ "text/csv", "text/plain" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "x-api-key",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "description" : "This is your private API key you can get by visiting https://app.informed.com/integrations",
+          "x-example" : "AE746A82-E74A-4D62-B801-43B5A19973F7"
+        }, {
+          "name" : "body",
+          "in" : "body",
+          "required" : true,
+          "schema" : {
+            "type" : "object",
+            "description" : "This file should be a modified version of an export from Informed.co. All field names should match the field names in the export. "
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Status 200",
+            "schema" : {
+              "type" : "string",
+              "description" : "A unique GUID representing a FeedRequestID is returned, which can later be used to get the status of that Feed Request."
+            },
+            "examples" : {
+              "application/json" : "B7EB50A9-4F8A-41C5-B7BB-695F9CEECDAC"
+            }
           }
         }
       }
