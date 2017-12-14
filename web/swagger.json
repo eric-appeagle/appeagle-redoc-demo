@@ -327,7 +327,8 @@
           "in" : "body",
           "required" : true,
           "schema" : {
-            "type" : "object",
+            "type" : "string",
+            "format" : "binary",
             "description" : "This file should be a modified version of an export from Informed.co. All field names should match the field names in the export. "
           }
         } ],
@@ -340,6 +341,47 @@
             },
             "examples" : {
               "application/json" : "B7EB50A9-4F8A-41C5-B7BB-695F9CEECDAC"
+            }
+          }
+        }
+      }
+    },
+    "/feed/feedRequestStatuses" : {
+      "get" : {
+        "summary" : "Get feed request list",
+        "description" : "Returns a list of Feed Request Status objects",
+        "parameters" : [ {
+          "name" : "fromDate",
+          "in" : "query",
+          "required" : false,
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "Optional date time representing minimum date for requested statuses",
+          "x-example" : "mm/dd/yyyy"
+        }, {
+          "name" : "toDate",
+          "in" : "query",
+          "required" : false,
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "Optional date time representing maximum date for requested statuses",
+          "x-example" : "mm/dd/yyyy"
+        }, {
+          "name" : "x-api-key",
+          "in" : "header",
+          "required" : false,
+          "type" : "string",
+          "description" : "This is your private API key you can get by visiting https://app.informed.com/integrations",
+          "x-example" : "B7EB50A9-4F8A-41C5-B7BB-695F9CEECDAC"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Status 200",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/FeedRequestStatus"
+              }
             }
           }
         }
@@ -482,6 +524,52 @@
           "example" : false
         }
       }
+    },
+    "FeedRequestStatus" : {
+      "type" : "object",
+      "properties" : {
+        "FeedRequestID" : {
+          "type" : "string",
+          "description" : "A unique identifier for this feed request.",
+          "example" : "B7EB50A9-4F8A-41C5-B7BB-695F9CEECDAC"
+        },
+        "Status" : {
+          "type" : "string",
+          "description" : "A string representation of the status of the feed request.",
+          "enum" : [ "pending", "completed" ]
+        },
+        "StatusDescription" : {
+          "type" : "string",
+          "description" : "Extra details about the status of the upload"
+        },
+        "RequestedDate" : {
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "The date the feed request was received"
+        },
+        "ProcessDate" : {
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "The date the feed request was processed"
+        },
+        "SuccessCount" : {
+          "type" : "integer",
+          "description" : "A count of how many listings in the file were completely and successfully updated"
+        },
+        "ErrorCount" : {
+          "type" : "integer",
+          "description" : "A count of how many listings in the file were not processed due to an error or validation problem"
+        },
+        "FeedTitle" : {
+          "type" : "string",
+          "description" : "The original file name"
+        },
+        "ErrorMessage" : {
+          "type" : "string",
+          "description" : "A custom message representing any large issue related to the upload"
+        }
+      },
+      "description" : "An object representing all data related to a feed upload request"
     }
   }
 }
